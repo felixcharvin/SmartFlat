@@ -5,26 +5,31 @@ GPIO.setmode(GPIO.BCM)
 
 TRIG = 23
 ECHO = 24
-
+LED = 18
+DOOR = 15
 
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
-
 GPIO.output(TRIG, False)
-mean_distance = 0
-pulsating_time = 0.1
 
+GPIO.setup(LED, GPIO.OUT)
+GPIO.output(LED,GPIO.LOW)
+
+GPIO.setup(DOOR,GPIO.IN,pull_up_down = GPIO.PUD_UP)
+
+mean_distance = 0
+pulsating_time = 0.01
+init_time = (int)(5/pulsating_time)
 def getDistance(p_time):
                 GPIO.output(TRIG, True)
                 time.sleep(p_time)
                 GPIO.output(TRIG,False)
 
                 while GPIO.input(ECHO)==0:
-                        pulse_start = time.time()
+	                pulse_start = time.time()
 
                 while GPIO.input(ECHO)==1:
                         pulse_end = time.time()
-
                 return round( (pulse_end - pulse_start)*17150,2)
 
 
@@ -37,12 +42,14 @@ def init(time_to_init, p_time):
 
 
 def waitingFor(mean, p_time):
-	while True:
+	while GPIO.input(DOOR)==0:
 		distance = getDistance(p_time)
 		buffer = []
 		count = 1
 		time_counter = 1
 		if(distance<mean*0.7):
+			print "Someone is detected at ",distance," cm !"
+			GPIO.output(LED,GPIO.HIGH)
 			buffer.append(distance)
 			while (sum(buffer)/count<mean*0.8):
 				buffer.append(getDistance(p_time))
@@ -52,12 +59,21 @@ def waitingFor(mean, p_time):
 				else:
 					del buffer[1]
 					
-			print "Someone was here ",time_counter*p_time," s"
+			print "He was here ",time_counter*p_time," s"
+			GPIO.output(LED,GPIO.LOW)
 
+
+def waitDoor(mean,p_time):
+	open= 1
+	while True:
+		open = GPIO.input(DOOR)
+		if(open==0):
+			print "Door opened !"
+			waitingFor(mean, p_time)
 
 print "distance measurement in progress..."
-mean_distance = init(100, pulsating_time)
+mean_distance = init(init_time, pulsating_time)
 print "Distance moyenne : ",mean_distance," cm"
 print "Now waiting for someone to pass by..."
-waitingFor(mean_distance,pulsating_time)
+waitDoor(mean_distance,pulsating_time)
 GPIO.cleanup()
