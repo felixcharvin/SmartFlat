@@ -1,0 +1,13 @@
+Objets :
+1 porte
+1 fenetre
+1 télé
+1 four
+* lumieres
+1 interrupteur
+
+Capteurs :
+temperature, humidité
+1 ou 2 ultrason
+* boutons
+1 luminosité
