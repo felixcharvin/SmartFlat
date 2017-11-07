@@ -25,5 +25,5 @@ $ nodemon server.js
 ## lancement du site (mode développement)
 $ npm run dev
 ```
-* URL de l'API: [http://localhost:3000/api/<object>](http://localhost:3000/api/<object>)
+* URL de l'API: [http://localhost:3000/api/](http://localhost:3000/api/)
 * URL du site: [http://localhost:8080](http://localhost:8080)
