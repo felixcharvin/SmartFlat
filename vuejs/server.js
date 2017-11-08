@@ -16,11 +16,9 @@ app.use(function(req, res, next) {
 });
 
 let ultrasonic = require('./API/ultrasonic')
+let light = require('./API/light')
 app.use('/api', ultrasonic)
-
-app.get('/api/test', (req, res) => {
-  res.send('hello world')
-})
+app.use('/api', light)
 
 app.listen(port, () => {
   console.log('Server is running on port', port);

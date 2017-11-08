@@ -4,6 +4,9 @@
       <div class="col-xs-3">
         <ultrasonics></ultrasonics>
       </div>
+      <div class="col-xs-6">
+        <lights></lights>
+      </div>
     </div>
     <h1 v-if="errors.lenght > 0">{{ errors }}</h1>
   </div>
@@ -13,10 +16,11 @@
 import axios from 'axios'
 import URL from './../config/global'
 import ultrasonics from './components/Ultrasonic.vue'
+import lights from './components/Lights.vue'
 
 export default {
   name: 'app',
-  components: { ultrasonics },
+  components: { ultrasonics, lights },
   data () {
     return {
       msg: '',
