@@ -10,7 +10,8 @@ router.post('/ultrasonic-init', (req, res) => {
     console.log('stderr: ${data}');
   });
   
-  res.send('coucou')
+  let status = { success: true }
+  res.json(status)
 })
 
 router.get('/ultrasonics', (req, res) => {

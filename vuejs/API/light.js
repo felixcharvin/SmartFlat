@@ -10,11 +10,13 @@ router.get('/lights', (req, res) => {
   })
 })
 
-router.get('/lights/status', (req, res) => {
-
+router.get('/light/:id', (req, res) => {
+  let id = req.params.id
+  console.log('id: ' + id)
+  res.send(id)
 })
 
-router.post('/lights/:id/:status', (req, res) => {
+router.post('/light/:id/:status', (req, res) => {
   
 })
 
