@@ -10,6 +10,16 @@ router.get('/lights', (req, res) => {
   })
 })
 
+router.get('/lights/count/:hour', (req, res) => {
+  let hour = req.params.hour+':'
+  let regex = new RegExp(hour)
+
+  db.lights.count({date: regex, status: 'on'}, (err, count) => {
+    if (err) console.log(err)
+    res.json(count)
+  })
+})
+
 router.get('/light/:id', (req, res) => {
   let id = req.params.id
   console.log('id: ' + id)
@@ -17,7 +27,23 @@ router.get('/light/:id', (req, res) => {
 })
 
 router.post('/light/:id/:status', (req, res) => {
-  
+  let id = req.params.id
+  let stat = req.params.status
+  console.log('id: ' + id + ', status: ' + stat)
+  let script = child_proc.spawn('python', ['./scripts/moc_light.py', id, stat])
+
+  let status = { success: true, data: {} }
+  script.stderr.on('data', (data) => {
+    console.log('stderr: ' + data);
+    status.success = false
+    status.data = data
+  });
+  script.stdout.on('data', (data) => {
+    console.log('stderr: ' + data);
+    status.success = true
+    status.data = data
+  });
+  res.json(status)  
 })
 
 module.exports = router

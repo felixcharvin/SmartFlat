@@ -1,10 +1,13 @@
 <template>
   <div id="app" class="container-fluid">
     <div class="row">
-      <div class="col-xs-3">
+      <div class="col-md-6">
+        <effectors></effectors>
+      </div>
+      <div class="col-md-3">
         <ultrasonics></ultrasonics>
       </div>
-      <div class="col-xs-6">
+      <div class="col-md-6">
         <lights></lights>
       </div>
     </div>
@@ -13,14 +16,16 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import URL from './../config/global'
 import ultrasonics from './components/Ultrasonic.vue'
 import lights from './components/Lights.vue'
+import effectors from './components/Effectors.vue'
 
 export default {
   name: 'app',
-  components: { ultrasonics, lights },
+  components: { ultrasonics, lights, effectors },
   data () {
     return {
       msg: '',

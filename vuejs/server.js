@@ -17,8 +17,10 @@ app.use(function(req, res, next) {
 
 let ultrasonic = require('./API/ultrasonic')
 let light = require('./API/light')
+let effector = require('./API/effector')
 app.use('/api', ultrasonic)
 app.use('/api', light)
+app.use('/api', effector)
 
 app.listen(port, () => {
   console.log('Server is running on port', port);
