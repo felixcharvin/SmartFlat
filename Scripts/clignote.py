@@ -3,7 +3,7 @@ import time
 
 GPIO.setwarnings(False)
 
-PINI = 21
+PINI = 18
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PINI,GPIO.OUT)
