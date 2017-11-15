@@ -9,7 +9,8 @@ client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smar
 db = client.smartflat
 lights = db.lights
 
-for i in range(0, 20):
+count = sys.argv[1]
+for i in range(0, count):
   hour = randint(0, 23)
   day = randint(1, 30)
   month = randint(1, 12)
