@@ -4,11 +4,13 @@
       <div class="col-md-6">
         <effectors></effectors>
       </div>
-      <div class="col-md-3">
-        <ultrasonics></ultrasonics>
-      </div>
       <div class="col-md-6">
         <lights></lights>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <ultrasonics></ultrasonics>
       </div>
     </div>
     <h1 v-if="errors.lenght > 0">{{ errors }}</h1>

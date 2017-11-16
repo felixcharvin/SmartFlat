@@ -11,7 +11,7 @@ router.get('/lights', (req, res) => {
 })
 
 router.get('/lights/count/:hour', (req, res) => {
-  let hour = req.params.hour+':'
+  let hour = ' '+req.params.hour+':'
   let regex = new RegExp(hour)
 
   db.lights.count({date: regex, status: 'on'}, (err, count) => {
@@ -20,10 +20,20 @@ router.get('/lights/count/:hour', (req, res) => {
   })
 })
 
-router.get('/light/:id', (req, res) => {
-  let id = req.params.id
-  console.log('id: ' + id)
-  res.send(id)
+router.get('/lights/frequencies', (req, res) => {
+  db.lights.find({$or: [{status: 'on'}, {status: 'low'}]}).limit(1000, (err, items) => {
+    if (err) console.log(err)
+    res.json(items)
+  })
+})
+
+router.get('/light/:location', (req, res) => {
+  let location = req.params.location
+  let regex = new RegExp("on|low")  
+  db.lights.find({location: location}).sort({date:1}).limit(1, (err, items) => {
+    if (err) console.log(err)
+    res.json(items)
+  })
 })
 
 router.post('/light/:id/:status', (req, res) => {

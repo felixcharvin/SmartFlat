@@ -8,7 +8,20 @@ export default {
   props: ['chartData'],  
   data() {
     return {
-      option: {responsive: true, maintainAspectRatio: false}     
+      option: {responsive: true, maintainAspectRatio: false, 
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      scales: {
+        xAxes: [{
+            barPercentage: 1.2
+        }]
+    }}     
     }
   },
   mounted () {
