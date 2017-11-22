@@ -1,25 +1,46 @@
+''' 			READ ME !
+This script detects anyone who passes under the sensor, activator pin 
+must be provided and mean distance as so
+
+HOW TO USE IT :
+python ultrasonic_start.py PIN_TO_LISTEN MEAN_DISTANCE
+
+PIN_TO_LISTEN is the pin of the door
+MEAN_DISTANCE is the mean distance calculated by the script ultrasonic_init.py
+'''
 import RPi.GPIO as GPIO
 import time
-GPIO.cleanup()
+import sys
+import pymongo
+import datetime
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
+db = client.smartflat
+ultrasonics = db.ultrasonics
+
+
 GPIO.setmode(GPIO.BCM)
 
 TRIG = 24
 ECHO = 23
-LED = 18
-DOOR = 25
+DOOR = int(sys.argv[1])
 
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
 GPIO.output(TRIG, False)
 
-GPIO.setup(LED, GPIO.OUT)
-GPIO.output(LED,GPIO.LOW)
-
 GPIO.setup(DOOR,GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
-mean_distance = 0
+mean_distance = float(sys.argv[2])
 pulsating_time = 0.01
 init_time = (int)(5/pulsating_time)
+
+data = {
+	"duration":0,
+	"distance":0,
+	"date":0
+}
 
 def getDistance(p_time):
                 GPIO.output(TRIG, True)
@@ -32,14 +53,6 @@ def getDistance(p_time):
                 while GPIO.input(ECHO)==1:
                         pulse_end = time.time()
                 return round( (pulse_end - pulse_start)*17150,2)
-
-
-def init(time_to_init, p_time):
-	data = []
-	print "Waiting for sensor to settle..."
-	for i in range(0,time_to_init):
-		data.append(getDistance(p_time))
-	return sum(data)/time_to_init
 
 
 def waitingFor(mean, p_time):
@@ -55,7 +68,6 @@ def waitingFor(mean, p_time):
 		time_counter = 1
 		if(distance<mean*0.7):
 			print "Someone is detected at ",distance," cm !"
-			GPIO.output(LED,GPIO.HIGH)
 			buffer.append(distance)
 			while (sum(buffer)/count<mean*0.8):
 				buffer.append(getDistance(p_time))
@@ -64,9 +76,12 @@ def waitingFor(mean, p_time):
 					count = count+1
 				else:
 					del buffer[1]
-					
+			data['duration']=time_counter*p_time
+			data['distance']=distance
+			data['date']=datetime.datetime.utcnow()
+			result = db.ultrasonics.insert_one(data)
+			print result.inserted_id
 			print "He was here ",time_counter*p_time," s"
-			GPIO.output(LED,GPIO.LOW)
 
 
 def waitDoor(mean,p_time):
@@ -80,9 +95,7 @@ def waitDoor(mean,p_time):
 			waitingFor(mean, p_time)
 			print "Door closed !"
 
-print "distance measurement in progress..."
-mean_distance = init(init_time, pulsating_time)
-print "Distance moyenne : ",mean_distance," cm"
 print "Now waiting for someone to pass by..."
 waitDoor(mean_distance,pulsating_time)
 GPIO.cleanup()
+sys.exit
