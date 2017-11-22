@@ -18,8 +18,8 @@
               <td>{{ effector.location }}</td>
               <td>{{ effector.status }}</td>
               <td>
-                <a class="btn btn-default" @click="switchOn(effector.type, effectors.pin, 1)">On</a> 
-                <a class="btn btn-danger" @click="switchOn(effector.type, effectors.pin, 0)">Off</a>
+                <a class="btn btn-default" @click="switchOn(effector, 1)">On</a> 
+                <a class="btn btn-danger" @click="switchOn(effector, 0)">Off</a>
               </td>
             </tr>
           </tbody>
@@ -51,10 +51,11 @@ export default {
         this.errors.push(e)
       })
     },
-    switchOn: function(type, pin, status) {
-      axios.post(URL.rootAPI+'/'+type+'/'+pin+'/'+status)
+    switchOn: function(effector, status) {
+      axios.post(URL.rootAPI+'/'+effector.type, {'id': effector.pin, 'status':status})
       .then(res => {
         this.msg = res.data
+        this.getHistory()
       })
       .catch(e => {
         this.errors.push(e)

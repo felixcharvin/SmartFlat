@@ -18,9 +18,8 @@ export default {
   data () {
     return {
       lights: [],
-      kitchenOnFrequencies: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      livingroomOnFrequencies: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      kitchenLowFrequencies: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      kitchenFrequencies:     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      livingroomOnFrequencies:  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       livingroomLowFrequencies: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       labels: ['00h00', '01h00', '02h00', '03h00', '04h00', '05h00', '06h00', '07h00', '08h00', '09h00', '10h00', 
               '11h00', '12h00', '13h00', '14h00', '15h00', '16h00', '17h00', '18h00', '19h00',
@@ -43,8 +42,7 @@ export default {
     fillData(frequencies) {
       frequencies.forEach(element => {
         let date = new Date(element.date)
-        if (element.location == 'kitchen' && element.status == 'on') this.kitchenOnFrequencies[date.getHours()]++
-        if (element.location == 'kitchen' && element.status == 'low') this.kitchenLowFrequencies[date.getHours()]++
+        if (element.location == 'kitchen') this.kitchenFrequencies[date.getHours()]++
         if (element.location == 'livingroom' && element.status == 'on') this.livingroomOnFrequencies[date.getHours()]++
         if (element.location == 'livingroom' && element.status == 'low') this.livingroomLowFrequencies[date.getHours()]++
       })
@@ -56,16 +54,10 @@ export default {
         this.data = {
           labels: this.labels,
           datasets: [{
-            data: this.kitchenOnFrequencies,
-            label: 'kitchen on',
+            data: this.kitchenFrequencies,
+            label: 'kitchen',
             borderColor: "#27ae60",
             backgroundColor: '#27ae60',
-            fill: false
-          }, {
-            data: this.kitchenLowFrequencies,
-            label: 'kitchen low',
-            borderColor: "#f1c40f",
-            backgroundColor: '#f1c40f',
             fill: false
           }, {
             data: this.livingroomOnFrequencies,

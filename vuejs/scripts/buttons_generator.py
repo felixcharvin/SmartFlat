@@ -29,4 +29,4 @@ for i in range(0, int(count)):
   print button
   buttonsList.append(button)
 
-# result = db.buttons.insert_many(buttonsList)
+result = db.buttons.insert_many(buttonsList)

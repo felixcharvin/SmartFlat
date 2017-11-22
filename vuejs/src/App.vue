@@ -12,8 +12,10 @@
       <div class="col-md-3">
         <ultrasonics></ultrasonics>
       </div>
+      <div class="col-md-3">
+        <thermometer></thermometer>
+      </div>
     </div>
-    <h1 v-if="errors.lenght > 0">{{ errors }}</h1>
   </div>
 </template>
 
@@ -24,16 +26,11 @@ import URL from './../config/global'
 import ultrasonics from './components/Ultrasonic.vue'
 import lights from './components/Lights.vue'
 import effectors from './components/Effectors.vue'
+import thermometer from './components/Thermometer.vue'
 
 export default {
   name: 'app',
-  components: { ultrasonics, lights, effectors },
-  data () {
-    return {
-      msg: '',
-      errors: []
-    }
-  }
+  components: { ultrasonics, lights, effectors, thermometer },
 }
 </script>
 

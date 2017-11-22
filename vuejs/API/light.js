@@ -10,16 +10,6 @@ router.get('/lights', (req, res) => {
   })
 })
 
-router.get('/lights/count/:hour', (req, res) => {
-  let hour = ' '+req.params.hour+':'
-  let regex = new RegExp(hour)
-
-  db.lights.count({date: regex, status: 'on'}, (err, count) => {
-    if (err) console.log(err)
-    res.json(count)
-  })
-})
-
 router.get('/lights/frequencies', (req, res) => {
   db.lights.find({$or: [{status: 'on'}, {status: 'low'}]}).limit(1000, (err, items) => {
     if (err) console.log(err)
@@ -29,31 +19,33 @@ router.get('/lights/frequencies', (req, res) => {
 
 router.get('/light/:location', (req, res) => {
   let location = req.params.location
-  let regex = new RegExp("on|low")  
   db.lights.find({location: location}).sort({date:1}).limit(1, (err, items) => {
     if (err) console.log(err)
-    res.json(items)
+    if (items.lenght < 1) console.log("no data found")
+    res.json(items[0])
   })
 })
 
-router.post('/light/:id/:status', (req, res) => {
-  let id = req.params.id
-  let stat = req.params.status
+router.post('/light', (req, res) => {
+  let id = req.body.id
+  let stat = req.body.status
   console.log('id: ' + id + ', status: ' + stat)
+
   let script = child_proc.spawn('python', ['./scripts/moc_light.py', id, stat])
 
-  let status = { success: true, data: {} }
+  let status = { success: null, data: null }
   script.stderr.on('data', (data) => {
     console.log('stderr: ' + data);
     status.success = false
     status.data = data
+    res.json(status)  
   });
   script.stdout.on('data', (data) => {
-    console.log('stderr: ' + data);
+    console.log('stdout: ' + data);
     status.success = true
     status.data = data
+    res.json(status)  
   });
-  res.json(status)  
 })
 
 module.exports = router

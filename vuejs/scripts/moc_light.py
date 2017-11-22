@@ -1,19 +1,27 @@
-import time
 import sys
 import pymongo
 import datetime
 from pymongo import MongoClient
 
+# define const
+LIVINGROOM = "livingroom"
+KITCHEN = "kitchen"
+UNKNOWN = "unknown"
+ON = "on"
+OFF = "off"
+LOW = "low"
+
+# get database
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
-lights = db.lights
 
-pin = sys.argv[1]
-stat = sys.argv[2]
+# get arguments
+pin = int(sys.argv[1])
+stat = int(sys.argv[2])
 
-status = "off" if stat == "0" else "on" if stat == "1" else "low"
-location = "kitchen" if pin == "0" else "livingroom"
-date = str(datetime.datetime.utcnow())
+location = KITCHEN if pin == 0 else LIVINGROOM if pin == 1 else UNKNOWN
+status = OFF if stat == 0 else LOW if stat == 2 and location == LIVINGROOM else ON
+date = str(datetime.datetime.utcnow()).replace(" ", "T")
 
 light = {
   "pin": pin,
@@ -24,4 +32,5 @@ light = {
 }
 
 print light
-result = db.lights.insert_one(light)
+db.lights.insert_one(light)
+db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
