@@ -11,6 +11,8 @@ db = client.smartflat
 pid = os.getpid()
 print pid
 
+db.sensors.update_one({"$id": "5a19e631f36d280cc00ddb8f"}, {"$set":{"status": "on", "pid": pid}})
+
 sec = 0
 while True:
   data = {
@@ -22,4 +24,3 @@ while True:
   time.sleep(2)
   sec += 1
 
-sys.exit

@@ -4,6 +4,10 @@
     <div class="panel-body">
       <div>Temperature: {{ thermometer.temperature }} °C</div>
       <div>Humidity: {{ thermometer.humidity }} %</div>
+      <hr>
+      <h5>Settings</h5>
+      <div>temperature:</div>
+      <vue-slider v-bind="slider" v-model="slider.value"></vue-slider>
     </div>
   </div>
 </template>
@@ -11,14 +15,36 @@
 <script>
 import URL from './../../config/global'
 import axios from 'axios'
+import vueSlider from 'vue-slider-component'
 
 export default {
   name: 'thermometer',
+  components: { vueSlider },
   data () {
     return {
       thermometer: {temperature: null, humidity: null},
+      slider: {
+        value: 0,
+        height: 6,
+        dotSize: 14,
+        min: 10,
+        max: 30,
+        interval: 0.5,
+        tooltip: 'hover',
+      },
       data: null,
       errors: []
+    }
+  },
+  watch: {
+    'slider.value': function(val, old) {
+      axios.post(URL.rootAPI + '/thermometer', {temperature: val})
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
   },
   methods: {
@@ -27,7 +53,9 @@ export default {
       .then(res => {
         this.thermometer.temperature = res.data.temperature
         this.thermometer.humidity = res.data.humidity
-    
+        this.slider.value = res.data.temperature
+
+
         console.log(this.thermometer)
       })
       .catch(e => {

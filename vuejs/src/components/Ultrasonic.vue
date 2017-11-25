@@ -2,26 +2,51 @@
   <div class="panel panel-default">
     <div class="panel-heading">Alarm</div>
     <div class="panel-body">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>duration</th>
-              <th>distance</th>
-              <th>date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="ultra in ultrasonics">
-              <td>{{ ultra.duration }}</td>
-              <td>{{ ultra.distance }}</td>
-              <td>{{ ultra.date }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <button class="btn btn-default" @click="init()">Init</button>
+      <div>Status: {{ alarm.status }}</div>
+      <hr>
+      <form>
+        <div class="form-group">
+          <label class="sr-only" for="code">Amount (in dollars)</label>
+          <div class="input-group">
+            <div class="input-group-addon">$</div>
+            <input type="number" v-model="code" class="form-control" id="code" placeholder="pass code">
+          </div>
+        </div>
+        <button type="button" class="btn btn-default" @click="enable()">Enable</button> 
+        <button type="button" class="btn btn-danger" @click="disable()">Disable</button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Code</button>
+      </form>
     </div>
+
+
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Alarm Pass Code</h4>
+          </div>
+          <form action="">
+            <div class="modal-body">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="number" class="form-control" placeholder="Old pass code">
+                  <input type="number" class="form-control" placeholder="New pass code">
+                  <input type="number" class="form-control" placeholder="Repeat new pass code">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button @click="changeCode()" class="btn btn-default" data-dismiss="modal">Edit</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -33,19 +58,32 @@ export default {
   name: 'ultrasonics',
   data () {
     return {
-      ultrasonics: [],
+      alarm: {},
+      code: null,
       errors: []
     }
   },
   methods: {
-    getHistory: function() {
-      axios.get(URL.rootAPI + '/ultrasonics')
+    getAlarm: function() {
+      axios.get(URL.rootAPI + '/ultrasonic')
       .then(res => {
-        this.ultrasonics = res.data
+        this.alarm = res.data
       })
       .catch(e => {
         this.errors.push(e)
       })
+    },
+    enable() {
+      console.log('enabled')
+      if (code == null || code == '') {
+        
+      }
+    },
+    disable() {
+      console.log('disabled')
+    },
+    changeCode() {
+      console.log("code changed")
     },
     init: function() {
       axios.post(URL.rootAPI + '/ultrasonic-init')
@@ -58,8 +96,7 @@ export default {
     }
   },
   created() {
-    let self=this
-    self.getHistory()
+    this.getAlarm()
   }
 }
 </script>

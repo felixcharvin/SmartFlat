@@ -14,6 +14,13 @@ router.post('/ultrasonic-init', (req, res) => {
   res.json(status)
 })
 
+router.get('/ultrasonic', (req, res) => {
+  db.sensors.findOne({name: 'Alarm'}, (err, item) => {
+    if (err) console.log(err)
+    res.json(item)
+  })
+})
+
 router.get('/ultrasonics', (req, res) => {
   db.ultrasonics.find().toArray((err, items) => {
     if (err) console.log(err)

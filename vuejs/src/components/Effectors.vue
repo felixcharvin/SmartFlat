@@ -52,7 +52,7 @@ export default {
       })
     },
     switchOn: function(effector, status) {
-      axios.post(URL.rootAPI+'/'+effector.type, {'id': effector.pin, 'status':status})
+      axios.post(URL.rootAPI+'/'+effector.type, {id: effector.pin, status: status})
       .then(res => {
         this.msg = res.data
         this.getHistory()
