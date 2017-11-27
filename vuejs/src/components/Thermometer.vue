@@ -5,9 +5,13 @@
       <div>Temperature: {{ thermometer.temperature }} °C</div>
       <div>Humidity: {{ thermometer.humidity }} %</div>
       <hr>
-      <h5>Settings</h5>
-      <div>temperature:</div>
-      <vue-slider v-bind="slider" v-model="slider.value"></vue-slider>
+      <h4>Settings:</h4>
+      <div class="row">
+        <div class="col-xs-3">Temperature:</div>
+        <div class="col-xs-9">
+          <vue-slider v-bind="slider" v-model="slider.value"></vue-slider>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -30,7 +34,7 @@ export default {
         min: 10,
         max: 30,
         interval: 0.5,
-        tooltip: 'hover',
+        tooltip: 'always',
       },
       data: null,
       errors: []
@@ -39,10 +43,9 @@ export default {
   watch: {
     'slider.value': function(val, old) {
       if (this.thermometer.temperature && val != this.thermometer.temperature) {
-        console.log("cpicoucoucoucocuoccu")
         axios.post(URL.rootAPI + '/thermometer', {temperature: val})
         .then(res => {
-          console.log(res)
+          // console.log(res)
         })
         .catch(err => {
           console.log(err)
@@ -57,9 +60,7 @@ export default {
         this.thermometer.temperature = res.data.temperature
         this.thermometer.humidity = res.data.humidity
         this.slider.value = res.data.temperature
-
-
-        console.log(this.thermometer)
+        // console.log(this.thermometer)
       })
       .catch(e => {
         this.errors.push(e)
