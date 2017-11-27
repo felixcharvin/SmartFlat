@@ -16,6 +16,10 @@ $ cd SmartFlat/vuejs && npm install
 $ npm install -g nodemon
 ```
 
+## Configuration pour le raspberry pi
+* modifier 'localhost' par l'IP du raspberry dans /vuejs/config/global.js
+* ajouter "--host <IP_RASPBERRY> --port <PORT>" à la ligne 9 (scripts:dev:) dans le fichier package.json
+
 ## Lancement du site
 * dans un premier terminal
 ```bash
