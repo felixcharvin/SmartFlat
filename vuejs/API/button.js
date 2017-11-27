@@ -10,6 +10,13 @@ router.get('/buttons', (req, res) => {
   })
 })
 
+router.get('/buttons/frequencies', (req, res) => {
+  db.buttons.find({status: 'on'}).limit(1000, (err, items) => {
+    if (err) console.log(err)
+    res.json(items)
+  })
+})
+
 router.post('/button', (req, res) => {
   let id = req.body.id
   let stat = req.body.status

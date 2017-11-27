@@ -3,6 +3,7 @@ import sys
 import datetime
 import os
 import pymongo
+from random import randint
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -11,16 +12,15 @@ db = client.smartflat
 ID = ObjectId("5a19e631f36d280cc00ddb8f")
 
 pid = os.getpid()
+print pid
 db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": pid}}, upsert=True)
 
-sec = 0
 while True:
   data = {
-    "duration":sec+1,
+    "duration":randint(1,9),
     "distance":10,
     "date": str(datetime.datetime.utcnow()).replace(" ", "T")
   }
-  # db.ultrasonics.insert_one(data)
+  db.ultrasonics.insert_one(data)
   time.sleep(2)
-  sec += 1
 

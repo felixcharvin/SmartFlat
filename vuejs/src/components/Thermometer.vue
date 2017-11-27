@@ -24,7 +24,7 @@ export default {
     return {
       thermometer: {temperature: null, humidity: null},
       slider: {
-        value: 0,
+        value: null,
         height: 6,
         dotSize: 14,
         min: 10,
@@ -38,13 +38,16 @@ export default {
   },
   watch: {
     'slider.value': function(val, old) {
-      axios.post(URL.rootAPI + '/thermometer', {temperature: val})
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      if (this.thermometer.temperature && val != this.thermometer.temperature) {
+        console.log("cpicoucoucoucocuoccu")
+        axios.post(URL.rootAPI + '/thermometer', {temperature: val})
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
     }
   },
   methods: {

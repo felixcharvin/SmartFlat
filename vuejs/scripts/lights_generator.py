@@ -7,7 +7,6 @@ from pymongo import MongoClient
 
 LIVINGROOM = "livingroom"
 KITCHEN = "kitchen"
-UNKNOWN = "unknown"
 ON = "on"
 OFF = "off"
 LOW = "low"
@@ -28,7 +27,6 @@ for i in range(0, int(count)):
   status = OFF if stat == 0 else LOW if stat == 2 and location == LIVINGROOM else ON
 
   light = {
-    "pin": randint(0,1),
     "location": location,
     "status": status,
     "manual": True,

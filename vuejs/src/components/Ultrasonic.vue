@@ -17,7 +17,7 @@
         </div>
         <button v-if="alarm.status == 'off'" type="reset" class="btn btn-default" @click="enable()">Enable</button> 
         <button v-if="alarm.status == 'on'" type="reset" class="btn btn-danger" @click="disable()">Disable</button>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Code</button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Passcode</button>
       </form>
     </div>
 
@@ -106,19 +106,21 @@ export default {
     },
     enable() {
       if (this.code == this.alarm.passcode) {
-        // enable alarm
+        //todo: enable alarm
         this.passcodeError = false
         this.alarm.status = 'on'
         this.code = null
+        this.init('enable', null)
       }
       else this.passcodeError = true
     },
     disable() {
       if (this.code == this.alarm.passcode) {
-        // disable alarm
+        //todo: disable alarm
         this.passcodeError = false
         this.alarm.status = 'off'
         this.code = null
+        this.init('disable', this.alarm.pid)
       }
       else this.passcodeError = true
     },
@@ -132,8 +134,6 @@ export default {
         this.changePasscodeError = false
         axios.put(URL.rootAPI + '/ultrasonic/passcode', {passcode: this.newCode})
         .then(res => {
-          console.log(res)
-          console.log("code changed")
           this.changePasscodeSuccess = true
           this.alarm.passcode = this.newCode
         })
@@ -147,10 +147,10 @@ export default {
       this.changePasscodeSuccess = false
       this.errors = []
     },
-    init: function() {
-      axios.post(URL.rootAPI + '/ultrasonic-init')
+    init: function(status, pid) {
+      axios.post(URL.rootAPI + '/ultrasonic', {status:status, pid:pid})
       .then(res => {
-        this.msg = res.data
+        console.log(res)
       })
       .catch(e => {
         console.log(e)
