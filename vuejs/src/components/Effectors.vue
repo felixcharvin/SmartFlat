@@ -16,10 +16,10 @@
             <tr v-for="effector in effectors">
               <td>{{ effector.name }}</td>
               <td>{{ effector.location }}</td>
-              <td>{{ effector.status }}</td>
+              <td v-bind:class="{'text-danger':effector.status=='off','text-success':effector.status=='on'}"><b>{{ effector.status.toUpperCase() }}</b></td>
               <td>
-                <a class="btn btn-default" @click="switchOn(effector, 1)">On</a> 
-                <a class="btn btn-danger" @click="switchOn(effector, 0)">Off</a>
+                <a v-if="effector.status == 'off'" class="btn btn-default" @click="switchOn(effector, 1)">On</a> 
+                <a v-if="effector.status == 'on'" class="btn btn-danger" @click="switchOn(effector, 0)">Off</a>
               </td>
             </tr>
           </tbody>
@@ -42,7 +42,7 @@ export default {
     }
   },
   methods: {
-    getHistory: function() {
+    getEffectors: function() {
       axios.get(URL.rootAPI + '/effectors')
       .then(res => {
         this.effectors = res.data
@@ -55,7 +55,7 @@ export default {
       axios.post(URL.rootAPI+'/'+effector.type, {id: effector.pin, status: status})
       .then(res => {
         this.msg = res.data
-        this.getHistory()
+        this.getEffectors()
       })
       .catch(e => {
         this.errors.push(e)
@@ -63,8 +63,7 @@ export default {
     }
   },
   created() {
-    let self=this
-    self.getHistory()
+    this.getEffectors()
   }
 }
 </script>

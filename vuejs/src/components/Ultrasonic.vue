@@ -2,7 +2,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">Alarm</div>
     <div class="panel-body">
-      <div>Status: {{ alarm.status }}</div>
+      <div class="alert" v-bind:class="{'alert-danger':alarm.status=='off', 'alert-success':alarm.status=='on'}">Status: {{ alarm.status }}</div>
       <hr>
       <form>
         <div class="form-group">
@@ -12,8 +12,11 @@
             <input type="number" v-model="code" class="form-control" id="code" placeholder="pass code">
           </div>
         </div>
-        <button type="button" class="btn btn-default" @click="enable()">Enable</button> 
-        <button type="button" class="btn btn-danger" @click="disable()">Disable</button>
+        <div v-if="passcodeError" class="col-xs-12">
+          <div class="alert alert-danger" role="alert">Incorrect passcode</div>
+        </div>
+        <button v-if="alarm.status == 'off'" type="reset" class="btn btn-default" @click="enable()">Enable</button> 
+        <button v-if="alarm.status == 'on'" type="reset" class="btn btn-danger" @click="disable()">Disable</button>
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Code</button>
       </form>
     </div>
@@ -28,18 +31,40 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Edit Alarm Pass Code</h4>
           </div>
-          <form action="">
+          <form class="form-horizontal">
             <div class="modal-body">
               <div class="form-group">
-                <div class="input-group">
-                  <input type="number" class="form-control" placeholder="Old pass code">
-                  <input type="number" class="form-control" placeholder="New pass code">
-                  <input type="number" class="form-control" placeholder="Repeat new pass code">
+                <label class="col-xs-4 control-label" for="old-pass">Old passcode: </label>
+                <div class="col-xs-8">
+                  <input type="number" id="old-pass" class="form-control" v-model="oldCode" placeholder="Old pass code">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-xs-4 control-label" for="new-pass">New passcode: </label>
+                <div class="col-xs-8">
+                  <input type="number" id="new-pass" class="form-control" v-model="newCode" placeholder="New pass code">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-xs-4 control-label" for="new-pass2">Repeat new passcode: </label>
+                <div class="col-xs-8">
+                  <input type="number" id="new-pass2" class="form-control" v-model="newCode2" placeholder="Repeat new pass code">
                 </div>
               </div>
             </div>
+            <div v-if="changePasscodeSuccess" class="col-xs-12">
+              <div class="alert alert-success" role="alert">Passcode changed</div>
+            </div>
+            <div v-if="changePasscodeError" class="col-xs-12">
+              <div class="alert alert-danger" role="alert">
+                <ul v-for="error in errors">
+                  <li>{{ error }}</li>
+                </ul>
+              </div>
+            </div>
             <div class="modal-footer">
-              <button @click="changeCode()" class="btn btn-default" data-dismiss="modal">Edit</button>
+              <button type="button" @click="changeCode()" class="btn btn-primary">Edit</button>
+              <button @click="closeModal()" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
           </form>
         </div>
@@ -60,6 +85,12 @@ export default {
     return {
       alarm: {},
       code: null,
+      oldCode: null,
+      newCode: null,
+      newCode2: null,
+      passcodeError: false,
+      changePasscodeError: false,
+      changePasscodeSuccess: false,
       errors: []
     }
   },
@@ -74,16 +105,47 @@ export default {
       })
     },
     enable() {
-      console.log('enabled')
-      if (code == null || code == '') {
-        
+      if (this.code == this.alarm.passcode) {
+        // enable alarm
+        this.passcodeError = false
+        this.alarm.status = 'on'
+        this.code = null
       }
+      else this.passcodeError = true
     },
     disable() {
-      console.log('disabled')
+      if (this.code == this.alarm.passcode) {
+        // disable alarm
+        this.passcodeError = false
+        this.alarm.status = 'off'
+        this.code = null
+      }
+      else this.passcodeError = true
     },
     changeCode() {
-      console.log("code changed")
+      this.errors = []
+      if (this.oldCode != this.alarm.passcode) this.errors.push("Old passcode incorrect")
+      if (this.newCode == null || this.newCode && this.newCode.length != 4) this.errors.push("Passcode must have 4 digits numbers")
+      if (this.newCode != this.newCode2) this.errors.push("Passcode and confirmation do not match")
+      if (this.errors.length > 0) this.changePasscodeError = true
+      else {
+        this.changePasscodeError = false
+        axios.put(URL.rootAPI + '/ultrasonic/passcode', {passcode: this.newCode})
+        .then(res => {
+          console.log(res)
+          console.log("code changed")
+          this.changePasscodeSuccess = true
+          this.alarm.passcode = this.newCode
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+    },
+    closeModal() {
+      this.changePasscodeError = false
+      this.changePasscodeSuccess = false
+      this.errors = []
     },
     init: function() {
       axios.post(URL.rootAPI + '/ultrasonic-init')
@@ -91,7 +153,7 @@ export default {
         this.msg = res.data
       })
       .catch(e => {
-        this.errors.push(e)
+        console.log(e)
       })
     }
   },

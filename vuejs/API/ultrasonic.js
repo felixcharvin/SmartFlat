@@ -28,4 +28,13 @@ router.get('/ultrasonics', (req, res) => {
   })
 })
 
+router.put('/ultrasonic/passcode', (req, res) => {
+  let passcode = req.body.passcode
+  console.log(passcode)
+  db.sensors.update({_id: db.ObjectId('5a19e631f36d280cc00ddb8f')}, {$set: {passcode: passcode}}, {}, (err, alarm) => {
+    if (err) console.log(err);
+    res.json({status:'success', alarm: alarm});
+});
+})
+
 module.exports = router
