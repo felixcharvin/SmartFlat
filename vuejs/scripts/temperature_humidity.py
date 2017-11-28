@@ -1,4 +1,5 @@
 import sys
+import time
 
 import Adafruit_DHT
 
@@ -9,13 +10,16 @@ sensor_args = { '11': Adafruit_DHT.DHT11,
                 '2302': Adafruit_DHT.AM2302 }
 
 sensor = Adafruit_DHT.DHT11
-pin = sys.argv[1]
-humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-for i in range(1,5):
-	hum, temp = Adafruit_DHT.read_retry(sensor, pin)
-	while hum is None or temp is None:
-		hum, temp = Adafruit_DHT.read_retry(sensor, pin)
-	temperature = temperature + temp
-	humidity = humidity + hum
+#DEFAULT VALUE : 3
+PIN = 3
+if len(sys.argv)>1:
+	PIN = sys.argv[1]
+def read_info():
+	humidity, temperature = Adafruit_DHT.read_retry(sensor, PIN)
+	while humidity is None or temperature is None or humidity > 100:
+		humidity, temperature = Adafruit_DHT.read_retry(sensor, PIN)
+	return {temperature,humidity}
 
-print('{0:0.1f}*  {1:0.1f}%'.format(temperature/float(5), humidity/float(5)))
+while True:
+	print read_info()
+	time.sleep(5)
