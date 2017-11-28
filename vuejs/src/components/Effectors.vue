@@ -16,10 +16,10 @@
             <tr v-for="effector in effectors">
               <td>{{ effector.name }}</td>
               <td>{{ effector.location }}</td>
-              <td>{{ effector.status }}</td>
+              <td v-bind:class="{'text-danger':effector.status=='off','text-success':effector.status=='on'}"><b>{{ effector.status.toUpperCase() }}</b></td>
               <td>
-                <a class="btn btn-default" @click="switchOn(effector.type, effectors.pin, 1)">On</a> 
-                <a class="btn btn-danger" @click="switchOn(effector.type, effectors.pin, 0)">Off</a>
+                <a v-if="effector.status == 'off'" class="btn btn-default" @click="switchStatus(effector, 1)">On</a> 
+                <a v-if="effector.status == 'on'" class="btn btn-danger" @click="switchStatus(effector, 0)">Off</a>
               </td>
             </tr>
           </tbody>
@@ -37,33 +37,32 @@ export default {
   name: 'effectors',
   data () {
     return {
-      effectors: [],
-      errors: []
+      effectors: []
     }
   },
   methods: {
-    getHistory: function() {
+    getEffectors: function() {
       axios.get(URL.rootAPI + '/effectors')
       .then(res => {
         this.effectors = res.data
       })
       .catch(e => {
-        this.errors.push(e)
+        console.log(e)
       })
     },
-    switchOn: function(type, pin, status) {
-      axios.post(URL.rootAPI+'/'+type+'/'+pin+'/'+status)
+    switchStatus: function(effector, status) {
+      axios.post(URL.rootAPI+'/'+effector.type, {id: effector.pin, status: status})
       .then(res => {
         this.msg = res.data
+        this.getEffectors()
       })
       .catch(e => {
-        this.errors.push(e)
+        console.log(e)
       })
     }
   },
   created() {
-    let self=this
-    self.getHistory()
+    this.getEffectors()
   }
 }
 </script>

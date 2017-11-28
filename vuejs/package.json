@@ -16,7 +16,8 @@
     "express": "^4.16.2",
     "mongojs": "^2.4.1",
     "vue": "^2.4.4",
-    "vue-chartjs": "^3.0.2"
+    "vue-chartjs": "^3.0.2",
+    "vue-slider-component": "^2.4.5"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
