@@ -17,15 +17,6 @@ router.get('/lights/frequencies', (req, res) => {
   })
 })
 
-router.get('/light/:location', (req, res) => {
-  let location = req.params.location
-  db.lights.find({location: location}).sort({date:1}).limit(1, (err, items) => {
-    if (err) console.log(err)
-    if (items.lenght < 1) console.log("no data found")
-    res.json(items[0])
-  })
-})
-
 router.post('/light', (req, res) => {
   let id = req.body.id
   let stat = req.body.status
