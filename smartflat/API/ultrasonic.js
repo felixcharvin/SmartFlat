@@ -5,8 +5,8 @@ let db          = require('mongojs')('mongodb://dreamteam:domotique@ds133311.mla
 
 router.post('/ultrasonic', (req, res) => {
   var script = null
-  if (req.body.status == 'enable') script = child_proc.spawn('python', ['./scripts/moc_ultrasonic.py']) 
-  else script = child_proc.spawn('python', ['./scripts/moc_ultrasonic_stop.py'])
+  if (req.body.status == 'enable') script = child_proc.spawn('python', ['./scripts/mocs/moc_ultrasonic.py']) 
+  else script = child_proc.spawn('python', ['./scripts/mocs/moc_ultrasonic_stop.py'])
   
   res.json({success:true})
 })

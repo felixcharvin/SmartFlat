@@ -49,7 +49,7 @@ def rc_time (PIN):
 data = {
 	'pin':PIN,
 	'luminosity':0,
-	'date':str(datetime.datetime.utcnow())
+	'date':str(datetime.datetime.utcnow()).replace(" ", "T")
 }
 cursor = db.luminosities.find().limit(1).sort([('$natural',-1)])
 last_lum = 4.6
@@ -64,11 +64,7 @@ def update_data(PIN):
 		sum = sum + rc_time(PIN)
 	sum = sum/50.0
 	if sum-last_lum>1 or sum-last_lum<-1:
-		data = {
-			'pin':PIN,
-			'luminosity':sum,
-			'date':str(datetime.datetime.utcnow())
-		}
+		data['luminosity'] = sum,
 		result = db.luminosities.insert(data)
 		last_lum = sum
 
