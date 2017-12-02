@@ -22,7 +22,7 @@ lights = db.lights
 
 PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
-MANUAL = int(sys.argv[3])==1
+MANUAL = int(sys.argv[3])
 
 
 GPIO.setmode(GPIO.BCM)
@@ -36,8 +36,9 @@ if STATUS==0 :
 
 location_str = " "
 
-if PIN == 21: location_str ="kitchen"
-if PIN == 26: location_str ="livingroom"
+if PIN == 11: location_str = "tv"
+if PIN == 6: location_str ="kitchen"
+if PIN == 9 or PIN == 10 : location_str ="livingroom"
 
 data = {
 	"pin":sys.argv[1],

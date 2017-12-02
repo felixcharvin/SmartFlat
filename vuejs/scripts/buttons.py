@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import sys
+import os
 import pymongo
 import datetime
 from pymongo import MongoClient
@@ -15,13 +16,6 @@ TELE = 5
 KIT = 19
 FUR = 13
 
-data = {
-	"pin":0,
-	"location":0,
-	"status":0,
-	"manual":True,
-	"date":str(datetime.datetime.utcnow())
-}
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(WINDOW, GPIO.IN,pull_up_down = GPIO.PUD_UP)
@@ -35,15 +29,26 @@ def fill_data(pin,loc):
 	status = 1
 	if last.count()>0:
 		old =  next(last,None)
-		print old
-		status = old['status']
-	data['pin']=str(pin)
-	data['location']=loc
-	data['status']=str(not status)
-	data['date']=str(datetime.datetime.utcnow())
+		#print"OLD \t", old
+		if old['status'] in "False":
+			status = "1"
+		if old['status'] in "True":
+			status = "0"
+		if old['status'] in "0":
+			status = "1"
+		if old['status'] in "1":
+			status = "0"
+	data = {
+		'pin':str(pin),
+		'location':loc,
+		'status':status,
+		'manual':True,
+		'date':datetime.datetime.utcnow()
+	}
+	#print "NEW \t",data
 	result = db.buttons.insert(data)
-	print data
-	print result
+	os.system("python behaviour_manager.py buttons "+loc+" "+status+" 0")
+#	print result
 
 
 #fill_data(WINDOW,'window')
@@ -52,25 +57,26 @@ while True:
 	if GPIO.input(WINDOW)==0:
 		while GPIO.input(WINDOW)==0:
 			True
-		print "Window !"
+		#print "Window !"
 		fill_data(WINDOW,'window')
+	
 	if GPIO.input(LIVRO)==0:
 		while GPIO.input(LIVRO)==0:
 			True
-		print "Living room !"
+		#print "Living room !"
 		fill_data(LIVRO,'living room')
 	if GPIO.input(TELE)==0:
 		while GPIO.input(TELE)==0:
 			True
-		print "Television !"
+		#print "Television !"
 		fill_data(TELE,'tv')
 	if GPIO.input(KIT)==0:
 		while GPIO.input(KIT)==0:
 			True
-		print "Kitchen !"
+		#print "Kitchen !"
 		fill_data(KIT,'kitchen')
 	if GPIO.input(FUR)==0:
 		while GPIO.input(FUR)==0:
 			True
-		print "Furnace !"
+		#print "Furnace !"
 		fill_data(FUR,'furnace')
