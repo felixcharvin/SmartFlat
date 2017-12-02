@@ -20,9 +20,7 @@ router.get('/lights/frequencies', (req, res) => {
 router.post('/light', (req, res) => {
   let id = req.body.id
   let stat = req.body.status
-  console.log('id: ' + id + ', status: ' + stat)
-
-  let script = child_proc.spawn('python', ['./scripts/moc_lights.py', id, stat])
+  let script = child_proc.spawn('python', ['./scripts/led_switch.py', id, stat, '1'])
 
   let status = { success: null, data: null }
   script.stderr.on('data', (data) => {
