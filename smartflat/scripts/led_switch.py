@@ -60,6 +60,6 @@ print data
 if location_str != "tv":
 	db.lights.insert_one(data)
 
-db.effectors.update_one({"$or": {"pin": PIN}, {"pinLow": PIN}, {"pinOn": PIN}}, {"$set":{"status": status}})
+db.effectors.update_one({"$or": [{"pin": PIN}, {"pinLow": PIN}, {"pinOn": PIN}]}, {"$set":{"status": status}})
 
 sys.exit()
