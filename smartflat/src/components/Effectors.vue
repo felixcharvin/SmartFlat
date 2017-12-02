@@ -18,9 +18,9 @@
               <td>{{ effector.location }}</td>
               <td v-bind:class="{'text-danger':effector.status=='off','text-success':effector.status=='on'}"><b>{{ effector.status.toUpperCase() }}</b></td>
               <td>
-                <a v-if="effector.status == 'off' || effector.status == 'low'" class="btn btn-default" @click="switchStatus(effector, 1)">On</a> 
-                <a v-if="effector.pinLow && (effector.status == 'off' || effector.status == 'on')" class="btn btn-primary" @click="switchStatus(effector, 1)">Low</a> 
-                <a v-if="effector.status == 'on' || effector.status == 'low'" class="btn btn-danger" @click="switchStatus(effector, 0)">Off</a>
+                <a v-if="effector.status == 'off' || effector.status == 'low'" class="btn btn-default" @click="switchStatus(effector.type, effector.pin, 1)">On</a> 
+                <a v-if="effector.pinLow && (effector.status == 'off' || effector.status == 'on')" class="btn btn-primary" @click="switchStatus(effector.type, effector.pinLow, 1)">Low</a> 
+                <a v-if="effector.status == 'on' || effector.status == 'low'" class="btn btn-danger" @click="switchStatus(effector.type, effector.pin, 0)">Off</a>
               </td>
             </tr>
           </tbody>
@@ -51,8 +51,8 @@ export default {
         console.log(e)
       })
     },
-    switchStatus: function(effector, status) {
-      axios.post(URL.rootAPI+'/'+effector.type, {id: effector.pin, status: status})
+    switchStatus: function(type, pin, status) {
+      axios.post(URL.rootAPI+'/'+type, {id: pin, status: status})
       .then(res => {
         this.msg = res.data
         this.getEffectors()
