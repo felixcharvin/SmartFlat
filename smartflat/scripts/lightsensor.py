@@ -4,7 +4,7 @@ It means 50 values to ignore erred data
 HOW TO USE IT :
 python lightsensor.py LIGHT_SENSOR_PIN
 
-DEFAULT PIN : 19
+DEFAULT PIN : 26
 
 '''
 import RPi.GPIO as GPIO
@@ -20,7 +20,7 @@ db = client.smartflat
 
 
 
-PIN = 19
+PIN = 26
 
 if len(sys.argv)>1:
 	PIN = int(sys.argv[1])
