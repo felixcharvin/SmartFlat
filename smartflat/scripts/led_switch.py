@@ -33,15 +33,19 @@ STATUS = int(sys.argv[2])
 MANUAL = int(sys.argv[3])
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(PIN, GPIO.OUT)
 
-if PIN == PIN_LR_ON or PIN == PIN_LR_LOW:
+if PIN == PIN_LR_ON or PIN == PIN_LR_LOW :
+	print "here I am !"
+	GPIO.setup(PIN_LR_ON,GPIO.OUT)
+	GPIO.setup(PIN_LR_LOW,GPIO.OUT)
 	GPIO.output(PIN_LR_ON,0)
 	GPIO.output(PIN_LR_LOW,0)
+else:
+	GPIO.setup(PIN, GPIO.OUT)
 
 GPIO.output(PIN,STATUS)
 
-status = OFF if STATUS == 0 else LOW if STATUS == 1 and PIN == PIN_LR_LOW else OFF
+status = OFF if STATUS == 0 else LOW if STATUS == 1 and PIN == PIN_LR_LOW else ON
 
 location_str = " "
 if PIN == PIN_TV: location_str = "tv"
