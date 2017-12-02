@@ -14,6 +14,14 @@ import pymongo
 import datetime
 from pymongo import MongoClient
 
+ON = "on"
+OFF = "off"
+LOW = "low"
+PIN_LR_LOW = 10
+PIN_LR_ON = 9
+PIN_K = 6
+PIN_TV = 11
+
 GPIO.setwarnings(False)
 
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
@@ -30,26 +38,28 @@ GPIO.setup(PIN, GPIO.OUT)
 GPIO.output(PIN,STATUS)
 
 
-status_str = "on"
-if STATUS==0 : 
-	status_str = "off"
+# status_str = "on"
+# if STATUS==0 : 
+# 	status_str = "off"
+
+status = ON if STATUS == 1 else OFF
 
 location_str = " "
-
 if PIN == 11: location_str = "tv"
 if PIN == 6: location_str ="kitchen"
 if PIN == 9 or PIN == 10 : location_str ="livingroom"
 
 data = {
-	"pin":sys.argv[1],
 	"location":location_str,
-	"status":status_str,
+	"status":status,
 	"manual":MANUAL,
-	"date":datetime.datetime.utcnow()
+	"date":str(datetime.datetime.utcnow()).replace(" ", "T")
 }
 
 print data
-result = db.lights.insert_one(data)
-print result.inserted_id
+if location_str != "tv":
+	db.lights.insert_one(data)
+
+db.effectors.update_one({"$or": {"pin": PIN}, {"pinLow": PIN}, {"pinOn": PIN}}, {"$set":{"status": status}})
 
 sys.exit()
