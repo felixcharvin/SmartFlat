@@ -25,7 +25,7 @@ GPIO.setup(FUR, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
 def fill_data(pin,loc):
 	status = db.effectors.find_one({"pin": pin})["status"]
-	status = "off" if status == "on" else "off"
+	status = "off" if status == "on" else "on"
 
 	data = {
 		'location':loc,
