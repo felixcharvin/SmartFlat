@@ -14,6 +14,9 @@ import pymongo
 import datetime
 from pymongo import MongoClient
 
+LIVINGROOM = "livingroom"
+KITCHEN = "kitchen"
+UNKNOWN = "unknown"
 ON = "on"
 OFF = "off"
 LOW = "low"
@@ -41,12 +44,8 @@ if PIN == PIN_LR_ON or PIN == PIN_LR_LOW:
 
 GPIO.output(PIN,STATUS)
 
-status = OFF if STATUS == 0 else LOW if STATUS == 1 and PIN == PIN_LR_LOW else OFF
-
-location_str = " "
-if PIN == PIN_TV: location_str = "tv"
-if PIN == PIN_K: location_str ="kitchen"
-if PIN == PIN_LR_ON or PIN == PIN_LR_LOW: location_str ="livingroom"
+status = OFF if STATUS == 0 else LOW if STATUS == 1 and PIN == PIN_LR_LOW else ON
+location = KITCHEN if PIN == PIN_K else LIVINGROOM if PIN == PIN_LR_ON or PIN == PIN_LR_LOW else UNKNOWN 
 
 data = {
 	"location":location_str,
@@ -56,7 +55,7 @@ data = {
 }
 
 print data
-if location_str != "tv":
+if PIN != PIN_TV:
 	db.lights.insert_one(data)
 
 db.effectors.update_one({"$or": [{"pin": PIN}, {"pinLow": PIN}, {"pinOn": PIN}]}, {"$set":{"status": status}})
