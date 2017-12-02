@@ -23,9 +23,11 @@ GPIO.setup(TELE, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 GPIO.setup(KIT, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 GPIO.setup(FUR, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
+# TODO led_switch already manages low and on
+
 def fill_data(pin,loc):
-	status = db.effectors.find_one({"pin": pin})["status"]
-	status = "off" if status == "on" else "off"
+	status = db.sensors.find_one({"pin": int(pin)})['status']
+	status = "off" if status == "on" else "on"
 
 	data = {
 		'location':loc,
