@@ -9,8 +9,9 @@ FURNACE = "Furnace"
 UNKNOWN = "unknown"
 ON = "on"
 OFF = "off"
-PIN_TV = 20
-PIN_FURNACE = 2
+PIN_TV = 5
+PIN_FURNACE = 13
+PIN_WINDOW = 2
 
 pin = int(sys.argv[1])
 stat = int(sys.argv[2])
@@ -28,5 +29,5 @@ button = {
 }
 
 print button
-# db.buttons.insert_one(button)
-# db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
+db.buttons.insert_one(button)
+db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
