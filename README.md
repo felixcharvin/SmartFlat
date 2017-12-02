@@ -8,7 +8,7 @@ Projet Domotique
 $ git clone git@github.com:felixcharvin/SmartFlat.git
 
 ## télécharge & installe les dépendances
-$ cd SmartFlat/vuejs && npm install
+$ cd SmartFlat/smartflat && npm install
 ```
 
 * installer nodemon en global (permet de recharger le serveur à chaque modification)
