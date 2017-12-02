@@ -21,19 +21,21 @@ db = client.smartflat
 # get arguments
 pin = int(sys.argv[1])
 stat = int(sys.argv[2])
+manual = int(sys.argv[3])
+
+status = OFF if stat == 0 else LOW if stat == 2 and location == LIVINGROOM else ON
+db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
 
 location = KITCHEN if pin == PIN_K else LIVINGROOM if pin == PIN_LR_LOW or pin == PIN_LR_ON else UNKNOWN
-status = OFF if stat == 0 else LOW if stat == 2 and location == LIVINGROOM else ON
 date = str(datetime.datetime.utcnow()).replace(" ", "T")
 
 light = {
   "pin": pin,
   "location": location,
   "status": status,
-  "manual": True,
+  "manual": manual,
   "date": date
 }
 
 print light
 db.lights.insert_one(light)
-db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})

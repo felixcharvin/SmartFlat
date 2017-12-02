@@ -18,8 +18,9 @@
               <td>{{ effector.location }}</td>
               <td v-bind:class="{'text-danger':effector.status=='off','text-success':effector.status=='on'}"><b>{{ effector.status.toUpperCase() }}</b></td>
               <td>
-                <a v-if="effector.status == 'off'" class="btn btn-default" @click="switchStatus(effector, 1)">On</a> 
-                <a v-if="effector.status == 'on'" class="btn btn-danger" @click="switchStatus(effector, 0)">Off</a>
+                <a v-if="effector.status == 'off' || effector.status == 'low'" class="btn btn-default" @click="switchStatus(effector, 1)">On</a> 
+                <a v-if="effector.pinLow && (effector.status == 'off' || effector.status == 'on')" class="btn btn-primary" @click="switchStatus(effector, 1)">Low</a> 
+                <a v-if="effector.status == 'on' || effector.status == 'low'" class="btn btn-danger" @click="switchStatus(effector, 0)">Off</a>
               </td>
             </tr>
           </tbody>

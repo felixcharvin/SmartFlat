@@ -24,6 +24,7 @@ PIN_LR_LOW = 10
 PIN_LR_ON = 9
 PIN_K = 6
 PIN_TV = 11
+PIN_FUR = 13
 
 GPIO.setwarnings(False)
 
@@ -58,9 +59,9 @@ data = {
 }
 
 print data
-if PIN != PIN_TV:
+if PIN != PIN_TV and PIN != PIN_FUR:
 	db.lights.insert_one(data)
 
-db.effectors.update_one({"$or": [{"pin": PIN}, {"pinLow": PIN}, {"pinOn": PIN}]}, {"$set":{"status": status}})
+db.effectors.update_one({"$or": [{"pin": PIN}, {"pinLow": PIN}]}, {"$set":{"status": status}})
 
 sys.exit()

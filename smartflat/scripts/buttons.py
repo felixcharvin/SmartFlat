@@ -33,7 +33,7 @@ def fill_data(pin,loc):
 		'location':loc,
 		'status':status,
 		'manual':True,
-		'date':datetime.datetime.utcnow()
+		'date':str(datetime.datetime.utcnow()).replace(" ", "T")
 	}
 	print data
 	db.buttons.insert(data)
