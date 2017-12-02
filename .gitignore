@@ -1,2 +1,3 @@
 Scripts/*.save
 .DS_Store
+node_modules/
