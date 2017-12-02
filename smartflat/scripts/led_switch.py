@@ -32,22 +32,21 @@ PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
 MANUAL = int(sys.argv[3])
 
-
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIN, GPIO.OUT)
+
+if PIN == PIN_LR_ON or PIN == PIN_LR_LOW:
+	GPIO.output(PIN_LR_ON,0)
+	GPIO.output(PIN_LR_LOW,0)
+
 GPIO.output(PIN,STATUS)
 
-
-# status_str = "on"
-# if STATUS==0 : 
-# 	status_str = "off"
-
-status = ON if STATUS == 1 else OFF
+status = OFF if STATUS == 0 else LOW if STATUS == 1 and PIN == PIN_LR_LOW else OFF
 
 location_str = " "
-if PIN == 11: location_str = "tv"
-if PIN == 6: location_str ="kitchen"
-if PIN == 9 or PIN == 10 : location_str ="livingroom"
+if PIN == PIN_TV: location_str = "tv"
+if PIN == PIN_K: location_str ="kitchen"
+if PIN == PIN_LR_ON or PIN == PIN_LR_LOW: location_str ="livingroom"
 
 data = {
 	"location":location_str,
