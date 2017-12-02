@@ -4,7 +4,7 @@ It means 50 values to ignore erred data
 HOW TO USE IT :
 python lightsensor.py LIGHT_SENSOR_PIN
 
-DEFAULT PIN : 26
+DEFAULT PIN : 19
 
 '''
 import RPi.GPIO as GPIO
@@ -20,7 +20,7 @@ db = client.smartflat
 
 
 
-PIN = 26
+PIN = 19
 
 if len(sys.argv)>1:
 	PIN = int(sys.argv[1])
@@ -63,14 +63,12 @@ def update_data(PIN):
 	for i in range(50):
 		sum = sum + rc_time(PIN)
 	sum = sum/50.0
-	print sum
 	if sum-last_lum>1 or sum-last_lum<-1:
 		data = {
 			'pin':PIN,
 			'luminosity':sum,
 			'date':str(datetime.datetime.utcnow())
 		}
-		print data
 		result = db.luminosities.insert(data)
 		last_lum = sum
 
