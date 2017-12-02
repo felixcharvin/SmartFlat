@@ -11,6 +11,14 @@ import RPi.GPIO as GPIO
 import time
 import sys
 from pylab import log
+import datetime
+import pymongo
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
+db = client.smartflat
+
+
 
 PIN = 19
 
@@ -19,9 +27,9 @@ if len(sys.argv)>1:
 
 GPIO.setmode(GPIO.BCM)
 
-#MAX light = 0		10
+#MAX light = 0		100
 #MIN light >1000	0
-#MIN visibility >100	4,6
+#MIN visibility >100	46
 
 def rc_time (PIN):
     count = 0
@@ -43,14 +51,27 @@ data = {
 	'luminosity':0,
 	'date':str(datetime.datetime.utcnow())
 }
-last = # TODO retrieve data from db
+cursor = db.luminosities.find().limit(1).sort([('$natural',-1)])
+last_lum = 4.6
+if cursor.count()>0:
+	last_data = next(cursor,None)
+	last_lum = last_data['luminosity']
 
 def update_data(PIN):
-	
+	global last_lum 	
 	sum = 0.0
 	for i in range(50):
 		sum = sum + rc_time(PIN)
-	if sum-last>0.01 || sum-last<0.01:
-		
+	sum = sum/50.0
+	if sum-last_lum>1 or sum-last_lum<-1:
+		data = {
+			'pin':PIN,
+			'luminosity':sum,
+			'date':str(datetime.datetime.utcnow())
+		}
+		result = db.luminosities.insert(data)
+		last_lum = sum
 
+while True :
+	update_data(PIN)
 
