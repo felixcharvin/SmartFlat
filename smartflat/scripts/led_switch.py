@@ -25,6 +25,7 @@ PIN_LR_ON = 9
 PIN_K = 6
 PIN_TV = 11
 PIN_FUR = 13
+PIN_WIN = 2
 
 GPIO.setwarnings(False)
 
@@ -36,17 +37,18 @@ PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
 MANUAL = int(sys.argv[3])
 
+if PIN != PIN_WIN and PIN != PIN_FUR:
+	if PIN == PIN_LR_ON or PIN == PIN_LR_LOW :
+		GPIO.setmode(GPIO.BCM)
+		GPIO.setup(PIN_LR_ON,GPIO.OUT)
+		GPIO.setup(PIN_LR_LOW,GPIO.OUT)
+		GPIO.cleanup()
 
-if PIN == PIN_LR_ON or PIN == PIN_LR_LOW :
 	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(PIN_LR_ON,GPIO.OUT)
-	GPIO.setup(PIN_LR_LOW,GPIO.OUT)
-	GPIO.cleanup()
+	GPIO.setup(PIN, GPIO.OUT)
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(PIN, GPIO.OUT)
+	GPIO.output(PIN,STATUS)
 
-GPIO.output(PIN,STATUS)
 
 status = OFF if STATUS == 0 else LOW if STATUS == 1 and PIN == PIN_LR_LOW else ON
 db.effectors.update_one({"$or": [{"pin": PIN}, {"pinLow": PIN}]}, {"$set":{"status": status}})
@@ -61,7 +63,7 @@ data = {
 }
 
 print data
-if PIN != PIN_TV and PIN != PIN_FUR:
+if PIN != PIN_TV and PIN != PIN_FUR and PIN != PIN_WIN:
 	db.lights.insert_one(data)
 
 
