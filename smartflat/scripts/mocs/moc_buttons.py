@@ -2,6 +2,7 @@ import time
 import sys
 import pymongo
 import datetime
+import os
 from pymongo import MongoClient
 
 TV = "TV"
@@ -36,3 +37,4 @@ button = {
 
 print button
 db.buttons.insert_one(button)
+os.system("python buttons_manager.py "+str(PIN)+" "+("0" if status == OFF else "1")+" 1")

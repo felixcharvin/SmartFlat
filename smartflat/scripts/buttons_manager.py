@@ -15,9 +15,8 @@ PIN_FUR = 13
 
 PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
-MANUAL = int(sys.argv[3]) if len(sys.argv)>4 else 0
+MANUAL = int(sys.argv[3]) if len(sys.argv)>3 else 0
 
-print "BTN AI changes detected !"
 print "pin: "+str(PIN)+", status: "+str(STATUS)+", manual: "+str(MANUAL)
 
 def getLuminosity():
@@ -56,4 +55,4 @@ if PIN == PIN_TV:
 	os.system("python led_switch.py "+str(PIN_TV)+" "+str(STATUS)+" "+str(MANUAL))
 	if STATUS==1: light_livingroom(True)
 if PIN == PIN_WIN:
-  print "todo"
+	os.system("python led_rgb_switch.py") #switch off the rgb led (heat)

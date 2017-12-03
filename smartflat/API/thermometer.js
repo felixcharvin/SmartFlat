@@ -11,7 +11,7 @@ router.get('/thermometers', (req, res) => {
 })
 
 router.get('/thermometer', (req, res) => {
-  db.thermometers.find().sort({date:1}).limit(1, (err, items) => {
+  db.thermometers.find().sort({$natural: -1}).limit(1, (err, items) => {
     if (err) console.log(err)
     res.json(items[0])
   })
