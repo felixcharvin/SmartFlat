@@ -10,62 +10,64 @@ client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smar
 db = client.smartflat
 buttons = db.buttons
 
-WINDOW = 2
-LIVRO = 4
-TELE = 5
-KIT = 19
-FUR = 13
+PIN_WIN = 2
+PIN_LR = 4
+PIN_TV = 5
+PIN_K = 19
+PIN_FUR = 13
+ON = "on"
+OFF = "off"
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(WINDOW, GPIO.IN,pull_up_down = GPIO.PUD_UP)
-GPIO.setup(LIVRO, GPIO.IN,pull_up_down = GPIO.PUD_UP)
-GPIO.setup(TELE, GPIO.IN,pull_up_down = GPIO.PUD_UP)
-GPIO.setup(KIT, GPIO.IN,pull_up_down = GPIO.PUD_UP)
-GPIO.setup(FUR, GPIO.IN,pull_up_down = GPIO.PUD_UP)
+GPIO.setup(PIN_WIN, GPIO.IN,pull_up_down = GPIO.PUD_UP)
+GPIO.setup(PIN_LR, GPIO.IN,pull_up_down = GPIO.PUD_UP)
+GPIO.setup(PIN_TV, GPIO.IN,pull_up_down = GPIO.PUD_UP)
+GPIO.setup(PIN_K, GPIO.IN,pull_up_down = GPIO.PUD_UP)
+GPIO.setup(PIN_FUR, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
 # TODO led_switch already manages low and on
 
-def fill_data(pin,loc):
-	status = db.sensors.find_one({"pin": int(pin)})['status']
+def fill_data(pin):
+	effector = db.effectors.find_one({"btn": pin})
 	print status
-	status = "off" if status == "on" else "on"
+	status = OFF if effector['status'] == ON else ON
 
 	data = {
-		'location':loc,
+		'location':effector["location"],
 		'status':status,
 		'manual':True,
 		'date':str(datetime.datetime.utcnow()).replace(" ", "T")
 	}
 	print data
 	db.buttons.insert(data)
-#	db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
-	db.sensors.update_one({"pin": pin}, {"$set":{"status": status}})
-	# os.system("python behaviour_manager.py buttons "+loc+" "+("0" if status == "off" else "1")+" 1")
+	db.effectors.update_one({"btn": pin}, {"$set":{"status": status}})
+	# os.system("python behaviour_manager.py buttons "+loc+" "+("0" if status == OFF else "1")+" 1")
+	os.system("python buttons_manager.py "+effector.pin+" "+("0" if status == OFF else "1")+" 1")
 
 while True:
-	if GPIO.input(WINDOW)==0:
-		while GPIO.input(WINDOW)==0:
+	if GPIO.input(PIN_WIN)==0:
+		while GPIO.input(PIN_WIN)==0:
 			True
-		#print "Window !"
-		fill_data(WINDOW,'window')
+		#print "PIN_WIN !"
+		fill_data(PIN_WIN)
 	
-	if GPIO.input(LIVRO)==0:
-		while GPIO.input(LIVRO)==0:
+	if GPIO.input(PIN_LR)==0:
+		while GPIO.input(PIN_LR)==0:
 			True
 		#print "Living room !"
-		fill_data(LIVRO,'living room')
-	if GPIO.input(TELE)==0:
-		while GPIO.input(TELE)==0:
+		fill_data(PIN_LR)
+	if GPIO.input(PIN_TV)==0:
+		while GPIO.input(PIN_TV)==0:
 			True
-		#print "Television !"
-		fill_data(TELE,'tv')
-	if GPIO.input(KIT)==0:
-		while GPIO.input(KIT)==0:
+		#print "PINS_TVvision !"
+		fill_data(PIN_TV)
+	if GPIO.input(PIN_K)==0:
+		while GPIO.input(PIN_K)==0:
 			True
 		#print "Kitchen !"
-		fill_data(KIT,'kitchen')
-	if GPIO.input(FUR)==0:
-		while GPIO.input(FUR)==0:
+		fill_data(PIN_K)
+	if GPIO.input(PIN_FUR)==0:
+		while GPIO.input(PIN_FUR)==0:
 			True
 		#print "Furnace !"
-		fill_data(FUR,'furnace')
+		fill_data(PIN_FUR)
