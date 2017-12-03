@@ -12,6 +12,9 @@ PIN_LR = 9
 PIN_TV = 11
 PIN_K = 6
 PIN_FUR = 13
+PATH = os.getcwd()
+
+print PATH
 
 PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
@@ -30,11 +33,11 @@ def switch_on_lr(brightness):
   print brightness
 
   if brightness in "low" :
-    os.system("python led_switch.py 10 1 " + str(MANUAL))
+    os.system("python "+PATH+"/scripts/led_switch.py 10 1 " + str(MANUAL))
   elif brightness in "on":
-    os.system("python led_switch.py 9 1 " + str(MANUAL))
+    os.system("python "+PATH+"/scripts/led_switch.py 9 1 " + str(MANUAL))
   else:
-    os.system("python led_switch.py 9 0 " + str(MANUAL))
+    os.system("python "+PATH+"/scripts/led_switch.py 9 0 " + str(MANUAL))
 		
 
 def light_livingroom(tv):
@@ -48,11 +51,11 @@ def light_livingroom(tv):
 	
 
 if PIN == PIN_K or PIN == PIN_FUR:
-	os.system("python led_switch.py "+str(PIN_K)+" "+str(STATUS)+" "+str(MANUAL))
+	os.system("python "+PATH+"/scripts/led_switch.py "+str(PIN_K)+" "+str(STATUS)+" "+str(MANUAL))
 if PIN == PIN_LR:
   light_livingroom(False)
 if PIN == PIN_TV:
-	os.system("python led_switch.py "+str(PIN_TV)+" "+str(STATUS)+" "+str(MANUAL))
+	os.system("python "+PATH+"/scripts/led_switch.py "+str(PIN_TV)+" "+str(STATUS)+" "+str(MANUAL))
 	if STATUS==1: light_livingroom(True)
 if PIN == PIN_WIN:
-	os.system("python led_rgb_switch.py") #switch off the rgb led (heat)
+	os.system("python "+PATH+"/scripts/led_rgb_switch.py") #switch off the rgb led (heat)

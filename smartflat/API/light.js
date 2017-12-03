@@ -23,7 +23,7 @@ router.post('/light', (req, res) => {
   console.log('status: ' + stat + ', pin: ' + pin)
   // let script = child_proc.spawn('python', ['./scripts/mocs/moc_lights.py', pin, stat, '1'])
   let script = child_proc.spawn('python', ['./scripts/buttons_manager.py', pin, stat, '1'])
-
+  
   let status = { success: null, data: null }
   script.stderr.on('data', (data) => {
     console.log('stderr: ' + data);
