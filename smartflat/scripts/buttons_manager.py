@@ -14,12 +14,11 @@ PIN_K = 6
 PIN_FUR = 999
 
 PIN = int(sys.argv[1])
-LOCATION = sys.argv[2]
-STATUS = int(sys.argv[3])
-MANUAL = int(sys.argv[4]) if len(argv)>4 else 0
+STATUS = int(sys.argv[2])
+MANUAL = int(sys.argv[3]) if len(sys.argv)>4 else 0
 
 print "BTN AI changes detected !"
-print "pin: "+PIN+", location: " + LOCATION + ", status: "+STATUS
+print "pin: "+str(PIN)+", status: "+str(STATUS)+", manual: "+str(MANUAL)
 
 def getLuminosity():
 	lum = 4.6
@@ -32,30 +31,29 @@ def switch_on_lr(brightness):
   print brightness
 
   if brightness in "low" :
-    os.system("python led_switch.py 10 1 " + MANUAL)
-  if brightness in "on":
-    os.system("python led_switch.py 9 1 " + MANUAL)
+    os.system("python led_switch.py 10 1 " + str(MANUAL))
+  elif brightness in "on":
+    os.system("python led_switch.py 9 1 " + str(MANUAL))
   else:
-    os.system("python led_switch.py 9 0 " + MANUAL")
+    os.system("python led_switch.py 9 0 " + str(MANUAL))
 		
 
 def light_livingroom(tv):
 	lum = getLuminosity()
-	if (lum<3.6 or STATUS in "1") and not tv :
+	if (lum<3.6 or STATUS == 1) and not tv :
 		switch_on_lr("on")
+	elif lum<4.6 or STATUS == 1:
+		switch_on_lr("low")
 	else:
-		if lum<4.6 or STATUS in "1":
-			switch_on_lr("low")
-		else:
-			switch_on_lr("off")
+		switch_on_lr("off")
 	
 
-if PIN in PIN_K or PIN in PIN_FUR:
-	os.system("python led_switch.py "+PIN+" "+STATUS+" "+MANUAL)
-if PIN in PIN_LR:
+if PIN == PIN_K or PIN == PIN_FUR:
+	os.system("python led_switch.py "+str(PIN_K)+" "+str(STATUS)+" "+str(MANUAL))
+if PIN == PIN_LR:
   light_livingroom(False)
-if PIN in PIN_TV:
-	os.system("python led_switch.py "+PIN_TV+" "+STATUS+" "+MANUAL)
-	light_livingroom(True)
-if PIN in PIN_WIN:
+if PIN == PIN_TV:
+	os.system("python led_switch.py "+str(PIN_TV)+" "+str(STATUS)+" "+str(MANUAL))
+	if STATUS==1: light_livingroom(True)
+if PIN == PIN_WIN:
   print "todo"

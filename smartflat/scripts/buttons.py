@@ -29,7 +29,7 @@ GPIO.setup(PIN_FUR, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
 def fill_data(pin):
 	effector = db.effectors.find_one({"btn": pin})
-	print status
+	print effector
 	status = OFF if effector['status'] == ON else ON
 
 	data = {
@@ -42,7 +42,7 @@ def fill_data(pin):
 	db.buttons.insert(data)
 	db.effectors.update_one({"btn": pin}, {"$set":{"status": status}})
 	# os.system("python behaviour_manager.py buttons "+loc+" "+("0" if status == OFF else "1")+" 1")
-	os.system("python buttons_manager.py "+effector.pin+" "+("0" if status == OFF else "1")+" 1")
+	os.system("python buttons_manager.py "+str(effector["pin"])+" "+("0" if status == OFF else "1")+" 1")
 
 while True:
 	if GPIO.input(PIN_WIN)==0:

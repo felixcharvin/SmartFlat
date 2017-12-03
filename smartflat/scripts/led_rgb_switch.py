@@ -3,6 +3,8 @@ import time
 import random
 import sys
 
+G.setwarnings(False)
+
 RED = 22
 GREEN = 27
 BLUE = 17
