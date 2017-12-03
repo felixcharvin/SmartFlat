@@ -7,9 +7,12 @@ import os
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
 
-case = sys.argv[1]
+CASE = sys.argv[1]
+LOCATION = sys.argv[2]
+STATUS = sys.argv[3]
+
 print "changes detected !"
-print "file: "+sys.argv[0]+", type: "+sys.argv[1]+", pin: "+sys.argv[2]+", status:"+sys.argv[3]
+print "case: "+CASE+", pin: "+LOCATION+", status:"+STATUS
 
 def getLuminosity():
 	lum = 4.6
@@ -19,12 +22,10 @@ def getLuminosity():
 	return lum
 
 def turn_on_livingroom(brightness):
-		os.system("python led_switch.py 10 0 0")
-		os.system("python led_switch.py 9 0 0")
-		man = "0"
-		if len(sys.argv)>4:
-			man = sys.argv[4]
+		man = sys.argv[4] if len(sys.argv)>4 else "0"
+
 		print brightness
+
 		if brightness in "low" :
 			os.system("python led_switch.py 10 1 " + man)
 		if brightness in "high":
@@ -40,10 +41,10 @@ def turn_on_tv():
 
 def light_livingroom(tv):
 	lum = getLuminosity()
-	if (lum<3.6 or sys.argv[4] in "1") and not tv :
+	if (lum<3.6 or STATUS in "1") and not tv :
 		turn_on_livingroom("high")
 	else:
-		if lum<4.6 or sys.argv[4] in "1" :
+		if lum<4.6 or STATUS in "1" :
 			turn_on_livingroom("low")
 		else:
 			turn_on_livingroom("off")
@@ -51,14 +52,14 @@ def light_kitchen(status):
 	lum = getLuminosity()
 	os.system("python led_switch.py 6 "+status+" 0")
 	
-if case in "buttons":
+if CASE in "buttons":
         location = sys.argv[2]
         if location in "kitchen":
                 light_kitchen(sys.argv[3])
         if location in "furnace":
                 light_kitchen("1")
-        if location in "living room":
-                light_livingroom(sys.argv[3])#HIGH OR LOW OR OFF
+        if location in "livingroom":
+                light_livingroom(STATUS) #HIGH OR LOW OR OFF
         if location in "tv":
                 turn_on_tv()
                 #exec(light_led.py 11 sys.argv[3])
@@ -68,7 +69,7 @@ if case in "buttons":
                 #windowChanged()
 
 
-if case in "alarm":
+if CASE in "alarm":
         status = sys.arv[2]
         if status in "on":
                 True
