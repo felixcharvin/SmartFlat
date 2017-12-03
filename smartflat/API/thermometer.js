@@ -18,10 +18,28 @@ router.get('/thermometer', (req, res) => {
 })
 
 router.post('/thermometer', (req, res) => {
-  let temperature = req.body.temperature
-  console.log('temp: ' + temperature);
-  //todo: call edit temp script
-  res.json({status: 'success'})
+  let oldTemp = req.body.oldTemp
+  let newTemp = req.body.newTemp
+  console.log('old: ' + oldTemp + ', new: ' + newTemp)
+
+  var status = 'normal' 
+  if (newTemp > oldTemp) status = 'hot' 
+  else if (newTemp < oldTemp) status = 'cold' 
+  let script = child_proc.spawn('python', ['./scripts/led_rgb_switch.py', status])
+  
+  let response = { success: null, data: null }
+  script.stderr.on('data', (data) => {
+    console.log('stderr: ' + data);
+    response.success = false
+    response.data = data
+    res.json(status)
+  });
+  script.stdout.on('data', (data) => {
+    console.log('stdout: ' + data);
+    response.success = true
+    response.data = data
+    res.json(status)    
+  });
 })
 
 module.exports = router

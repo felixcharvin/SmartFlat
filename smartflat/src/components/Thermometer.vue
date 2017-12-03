@@ -43,7 +43,7 @@ export default {
   watch: {
     'slider.value': function(val, old) {
       if (this.thermometer.temperature && val != this.thermometer.temperature) {
-        axios.post(URL.rootAPI + '/thermometer', {temperature: val})
+        axios.post(URL.rootAPI + '/thermometer', {oldTemp: old, newTemp: val})
         .then(res => {
           // console.log(res)
         })
