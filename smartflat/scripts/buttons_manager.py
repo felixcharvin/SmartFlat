@@ -17,7 +17,7 @@ PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
 MANUAL = int(sys.argv[3]) if len(sys.argv)>3 else 0
 
-print "pin: "+str(PIN)+", status: "+str(STATUS)+", manual: "+str(MANUAL)
+print "BTN_MANAGER : { pin: "+str(PIN)+", status: "+str(STATUS)+", manual: "+str(MANUAL)+" }"
 
 # def getLuminosity():
 # 	lum = 4.6
