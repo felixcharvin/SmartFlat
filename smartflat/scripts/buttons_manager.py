@@ -51,7 +51,7 @@ def light_livingroom(tv):
 	
 
 if PIN in PIN_K or PIN in PIN_FUR:
-	os.system("python led_switch.py "+PIN+" "+STATUS+" "+MANUAL)
+	os.system("python led_switch.py "+PIN_K+" "+STATUS+" "+MANUAL)
 if PIN in PIN_LR:
   light_livingroom(False)
 if PIN in PIN_TV:
