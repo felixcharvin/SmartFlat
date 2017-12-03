@@ -20,6 +20,7 @@ router.get('/lights/frequencies', (req, res) => {
 router.post('/light', (req, res) => {
   let pin = req.body.id
   let stat = req.body.status
+  console.log('status: ' + stat + ', pin: ' + pin)
 
   child_proc.exec('python ./scripts/buttons_manager.py '+pin+' '+stat+' 1', (error, stdout, stderr) => {
     if (error) {
@@ -30,7 +31,6 @@ router.post('/light', (req, res) => {
   });
   
 
-  // console.log('status: ' + stat + ', pin: ' + pin)
   // // let script = child_proc.spawn('python', ['./scripts/mocs/moc_lights.py', pin, stat, '1'])
   // let script = child_proc.spawn('python', ['./scripts/buttons_manager.py', pin, stat, '1'])
 
