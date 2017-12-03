@@ -37,4 +37,3 @@ button = {
 
 print button
 db.buttons.insert_one(button)
-os.system("python buttons_manager.py "+str(PIN)+" "+("0" if status == OFF else "1")+" 1")
