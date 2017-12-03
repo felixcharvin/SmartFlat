@@ -8,7 +8,8 @@ client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smar
 db = client.smartflat
 
 case = sys.argv[1]
-print "changes detected !"+sys.argv[0]+sys.argv[1]+sys.argv[2]+sys.argv[3]
+print "changes detected !"
+print "file: "+sys.argv[0]+", type: "+sys.argv[1]+", pin: "+sys.argv[2]+", status:"+sys.argv[3]
 
 def getLuminosity():
 	lum = 4.6
@@ -28,10 +29,12 @@ def turn_on_livingroom(brightness):
 			os.system("python led_switch.py 10 1 " + man)
 		if brightness in "high":
 			os.system("python led_switch.py 9 1 " + man)
+		else:
+			os.system("python led_switch.py 9 0 " + man")
 	
 
 def turn_on_tv():
-	os.system("python led_switch.py 11 "+sys.argv[3]+" 1")
+	os.system("python led_switch.py 11 "+sys.argv[3]+" 0")
 	light_livingroom(True)
 	
 
@@ -46,7 +49,7 @@ def light_livingroom(tv):
 			turn_on_livingroom("off")
 def light_kitchen(status):
 	lum = getLuminosity()
-	os.system("python led_switch.py 6"+status)
+	os.system("python led_switch.py 6 "+status+" 0")
 	
 if case in "buttons":
         location = sys.argv[2]

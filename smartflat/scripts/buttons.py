@@ -40,7 +40,7 @@ def fill_data(pin,loc):
 	db.buttons.insert(data)
 #	db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
 	db.sensors.update_one({"pin": pin}, {"$set":{"status": status}})
-	os.system("python behaviour_manager.py buttons "+loc+" "+("0" if status == "off" else "1")+" 1")
+	# os.system("python behaviour_manager.py buttons "+loc+" "+("0" if status == "off" else "1")+" 1")
 
 while True:
 	if GPIO.input(WINDOW)==0:

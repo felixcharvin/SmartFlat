@@ -49,12 +49,14 @@ GPIO.setup(PIN, GPIO.OUT)
 GPIO.output(PIN,STATUS)
 
 status = OFF if STATUS == 0 else LOW if STATUS == 1 and PIN == PIN_LR_LOW else ON
+db.effectors.update_one({"$or": [{"pin": PIN}, {"pinLow": PIN}]}, {"$set":{"status": status}})
+
 location = KITCHEN if PIN == PIN_K else LIVINGROOM if PIN == PIN_LR_ON or PIN == PIN_LR_LOW else UNKNOWN 
 
 data = {
 	"location":location,
 	"status":status,
-	"manual":MANUAL,
+	"manual":True if MANUAL == 1 else False,
 	"date":str(datetime.datetime.utcnow()).replace(" ", "T")
 }
 
@@ -62,6 +64,5 @@ print data
 if PIN != PIN_TV and PIN != PIN_FUR:
 	db.lights.insert_one(data)
 
-db.effectors.update_one({"$or": [{"pin": PIN}, {"pinLow": PIN}]}, {"$set":{"status": status}})
 
 sys.exit()
