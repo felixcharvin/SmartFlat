@@ -7,11 +7,11 @@ import os
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
 
-PIN_WIN = 1000
+PIN_WIN = 2
 PIN_LR = 9
 PIN_TV = 11
 PIN_K = 6
-PIN_FUR = 999
+PIN_FUR = 13
 
 PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
