@@ -23,8 +23,11 @@ GPIO.setup(TELE, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 GPIO.setup(KIT, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 GPIO.setup(FUR, GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
+# TODO led_switch already manages low and on
+
 def fill_data(pin,loc):
-	status = db.effectors.find_one({"pin": pin})["status"]
+	status = db.sensors.find_one({"pin": int(pin)})['status']
+	print status
 	status = "off" if status == "on" else "on"
 
 	data = {
@@ -35,7 +38,8 @@ def fill_data(pin,loc):
 	}
 	print data
 	db.buttons.insert(data)
-	db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
+#	db.effectors.update_one({"pin": pin}, {"$set":{"status": status}})
+	db.sensors.update_one({"pin": pin}, {"$set":{"status": status}})
 	# os.system("python behaviour_manager.py buttons "+loc+" "+("0" if status == "off" else "1")+" 1")
 
 while True:
