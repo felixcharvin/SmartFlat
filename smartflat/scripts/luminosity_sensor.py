@@ -71,7 +71,7 @@ def update_data(PIN):
 		data['luminosity'] = sum,
 		print "lum: "+str(sum)
 		db.luminosities.insert(data)
-		os.system("python "+PATH+"/sensors_manager.py luminosity "+("-" if sum<last_lum else "")+sum)
+		# os.system("python "+PATH+"/luminosity_manager.py "+("-" if sum<last_lum else "")+sum)
 		last_lum = sum
 
 while True :
