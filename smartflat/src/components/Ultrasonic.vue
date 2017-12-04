@@ -110,7 +110,7 @@ export default {
         this.passcodeError = false
         this.alarm.status = 'on'
         this.code = null
-        this.init('enable', null)
+        this.init('enable')
       }
       else this.passcodeError = true
     },
@@ -120,7 +120,7 @@ export default {
         this.passcodeError = false
         this.alarm.status = 'off'
         this.code = null
-        this.init('disable', this.alarm.pid)
+        this.init('disable')
       }
       else this.passcodeError = true
     },
@@ -147,8 +147,8 @@ export default {
       this.changePasscodeSuccess = false
       this.errors = []
     },
-    init: function(status, pid) {
-      axios.post(URL.rootAPI + '/ultrasonic', {status:status, pid:pid})
+    init: function(status) {
+      axios.post(URL.rootAPI + '/ultrasonic', {status:status})
       .then(res => {
         console.log(res)
       })

@@ -53,7 +53,6 @@ export default {
     switchStatus: function(type, pin, status) {
       axios.post(URL.rootAPI+'/'+type, {id: pin, status: status})
       .then(res => {
-        this.msg = res.data
         this.getSensors()
       })
       .catch(e => {
