@@ -62,7 +62,6 @@ def updateDB(time, distance):
 	db.sensors.update_one({"_id": ID}, {"$set":{"alert": True}})
 	os.system("python sensors_manager.py alarm alert")
 
-
 def waitingFor(mean, p_time):
 	while True :
 		distance = getDistance(p_time)
