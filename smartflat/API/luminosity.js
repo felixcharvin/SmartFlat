@@ -12,12 +12,18 @@ router.get('/luminosities', (req, res) => {
 
 router.post('/luminosity', (req, res) => {
   let status = req.body.status
-  db.sensors.update({_id: db.ObjectId(id)}, {$set: {status: status}}, {}, (err, therm) => {
-    if (err) console.log(err)
-    console.log(therm)
-    res.json({status:'success', thermometer: therm})
-  })
+  console.log('light sensor status: '+status)
+  var script = null
+  if (status == 1) script = child_proc.spawn('python', ['./scripts/lightsensor.py']) 
+  else if (status == 0) script = child_proc.spawn('python', ['./scripts/kill_process.py', id])
+  
+  if (script) {
+    script.stderr.on('data', (data) => {
+      console.log('stderr: ' + data);
+    });
+  }
 
+  res.json({status: status})
 })
 
 module.exports = router
