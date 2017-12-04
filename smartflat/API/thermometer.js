@@ -40,7 +40,11 @@ router.post('/thermometer', (req, res) => {
     });
   }
 
+<<<<<<< HEAD
   setTimeout(function() { res.json({status:status}); }, 1000)
+=======
+  res.json({status: status})
+>>>>>>> d236ade6d066719c7f0203442a4e0c7ace2e79d6
 }) 
 
 router.put('/thermometer', (req, res) => {
