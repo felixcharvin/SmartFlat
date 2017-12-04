@@ -72,7 +72,7 @@ def waitingFor(mean, p_time):
 					del buffer[1]
 			
 			time = time_counter*p_time
-			print "He was here ",time," s"				
+			print "He was here ",time," s"
 			GPIO.output(LED,GPIO.LOW)
 
 print "distance measurement in progress..."
