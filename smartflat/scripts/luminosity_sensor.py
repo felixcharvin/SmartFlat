@@ -68,8 +68,11 @@ def update_data(PIN):
 		sum = sum + rc_time(PIN)
 	sum = sum/50.0
 	if sum-last_lum>1 or sum-last_lum<-1:
-		data['luminosity'] = sum,
-		print "lum: "+str(sum)
+		data = {
+			'pin':PIN,
+			'luminosity':sum,
+			'date':str(datetime.datetime.utcnow()).replace(" ", "T")
+		}
 		db.luminosities.insert(data)
 		# os.system("python "+PATH+"/luminosity_manager.py "+("-" if sum<last_lum else "")+sum)
 		last_lum = sum
