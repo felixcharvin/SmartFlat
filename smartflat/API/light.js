@@ -28,9 +28,7 @@ router.post('/light', (req, res) => {
       console.error(`exec error: ${error}`);
       return;
     }
-    console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
-    res.send("ok")
+    res.json({ok:'ok'})
   });
   
 
