@@ -34,7 +34,7 @@ def read_info():
 	}
 	print data
 	db.thermometers.insert(data)
-	settings = db.sensors.find_one({"_id": ID})["settings"]
+	settings = int(db.sensors.find_one({"_id": ID})["settings"])
 	action = "cold" if settings-temperature<-1 else "hot" if settings-temperature>1 else "normal"
 	os.system("python "+PATH+"/temperature_humidity_manager.py "+action)
 
