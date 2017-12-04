@@ -21,9 +21,7 @@ client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smar
 db = client.smartflat
 
 ID = ObjectId("5a1f0969734d1d3ed2310a53")
-PID = os.getpid()
-print PID
-db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": PID}}, upsert=True)
+db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": os.getpid()}}, upsert=True)
 
 PIN = 26
 
@@ -72,7 +70,8 @@ def update_data(PIN):
 	if sum-last_lum>1 or sum-last_lum<-1:
 		data['luminosity'] = sum,
 		print "lum: "+str(sum)
-		result = db.luminosities.insert(data)
+		db.luminosities.insert(data)
+		os.system("python "+PATH+"/sensors_manager.py luminosity "+("-" if sum<last_lum else "")+sum)
 		last_lum = sum
 
 while True :

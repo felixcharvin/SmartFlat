@@ -8,7 +8,7 @@ from pymongo import MongoClient
 
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
-buttons = db.buttons
+PATH = os.path.dirname(os.path.realpath(__file__))
 
 PIN_WIN = 2
 PIN_LR = 4
@@ -42,7 +42,7 @@ def fill_data(pin):
 	db.buttons.insert(data)
 	db.effectors.update_one({"btn": pin}, {"$set":{"status": status}})
 	# os.system("python behaviour_manager.py buttons "+loc+" "+("0" if status == OFF else "1")+" 1")
-	os.system("python buttons_manager.py "+str(effector["pin"])+" "+("0" if status == OFF else "1")+" 1")
+	os.system("python "+PATH+"/buttons_manager.py "+str(effector["pin"])+" "+("0" if status == OFF else "1")+" 1")
 
 while True:
 	if GPIO.input(PIN_WIN)==0:

@@ -1,15 +1,18 @@
 import sys
+import os
 import time
 import pymongo
 import datetime
-from pymongo import MongoClient
 import Adafruit_DHT
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
-temphum = db.thermometers
 
+ID = ObjectId("5a2313bcf36d285138ee0af1")
+db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": os.getpid()}}, upsert=True)
 
 # Parse command line parameters. if another sensor is used :
 sensor_args = { '11': Adafruit_DHT.DHT11,
@@ -19,9 +22,6 @@ sensor_args = { '11': Adafruit_DHT.DHT11,
 sensor = Adafruit_DHT.DHT11
 #DEFAULT VALUE : 3
 
-PIN = 3
-if len(sys.argv)>1:
-	PIN = sys.argv[1]
 def read_info():
 	humidity, temperature = Adafruit_DHT.read_retry(sensor, PIN)
 	while humidity is None or temperature is None or humidity > 100:
@@ -31,9 +31,13 @@ def read_info():
 		"humidity":humidity,
 		"date":str(datetime.datetime.utcnow()).replace(" ", "T")
 	}
+	print data
 	db.thermometers.insert(data)
 	return {temperature,humidity}
 
+PIN = 3
+if len(sys.argv)>1:
+	PIN = sys.argv[1]
 
 while True:
 	read_info()
