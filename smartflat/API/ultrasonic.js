@@ -16,7 +16,7 @@ router.post('/ultrasonic', (req, res) => {
     console.log('stderr: ' + data);
   });
 
-  res.json({status:status})
+  setTimeout(function() { res.json({status:status}); }, 1000)
 })
 
 router.get('/ultrasonic', (req, res) => {
