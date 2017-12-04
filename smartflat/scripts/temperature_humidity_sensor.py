@@ -15,7 +15,7 @@ ID = ObjectId("5a2313bcf36d285138ee0af1")
 db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": os.getpid()}}, upsert=True)
 
 thermometer = db.sensors.find_one({"_id": ID})
-settings = thermometer.settings
+settings = thermometer["settings"]
 
 # Parse command line parameters. if another sensor is used :
 sensor_args = { '11': Adafruit_DHT.DHT11,
