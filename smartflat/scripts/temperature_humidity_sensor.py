@@ -13,9 +13,6 @@ db = client.smartflat
 ID = ObjectId("5a2313bcf36d285138ee0af1")
 db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": os.getpid()}}, upsert=True)
 
-thermometer = db.sensors.find_one({"_id": ID})
-settings = thermometer["settings"]
-
 PATH = os.path.dirname(os.path.realpath(__file__))
 
 # Parse command line parameters. if another sensor is used :
@@ -37,6 +34,7 @@ def read_info():
 	}
 	print data
 	db.thermometers.insert(data)
+	settings = db.sensors.find_one({"_id": ID})["settings"]
 	action = "cold" if settings-temperature<-1 else "hot" if settings-temperature>1 else "normal"
 	os.system("python "+PATH+"/temperature_humidity_manager.py "+action)
 
