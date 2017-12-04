@@ -29,6 +29,10 @@ if len(sys.argv)>1:
 	PIN = int(sys.argv[1])
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setup(PIN, GPIO.OUT)
+GPIO.setup(PIN, GPIO.IN)
+GPIO.cleanup()
+GPIO.setmode(GPIO.BCM)
 
 #MAX light = 0		100
 #MIN light >1000	0
@@ -49,30 +53,26 @@ def rc_time (PIN):
     return 10*(10-log(count))
 
 
-data = {
-	'pin':PIN,
-	'luminosity':0,
-	'date':str(datetime.datetime.utcnow()).replace(" ", "T")
-}
 cursor = db.luminosities.find().limit(1).sort([('$natural',-1)])
-last_lum = 4.6
+last_lum = 46
 if cursor.count()>0:
 	last_data = next(cursor,None)
-	last_lum = last_data['luminosity']
-print data
+	last_lum = int(last_data['luminosity'])
+print last_lum
 
 def update_data(PIN):
 	global last_lum 	
 	sum = 0.0
 	for i in range(50):
 		sum = sum + rc_time(PIN)
-	sum = sum/50.0
+	sum = int(round(sum/50))
 	if sum-last_lum>1 or sum-last_lum<-1:
 		data = {
 			'pin':PIN,
 			'luminosity':sum,
 			'date':str(datetime.datetime.utcnow()).replace(" ", "T")
 		}
+		print data
 		db.luminosities.insert(data)
 		# os.system("python "+PATH+"/luminosity_manager.py "+("-" if sum<last_lum else "")+sum)
 		last_lum = sum
