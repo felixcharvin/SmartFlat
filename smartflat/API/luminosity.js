@@ -23,7 +23,7 @@ router.post('/luminosity', (req, res) => {
     });
   }
 
-  res.json({status: status})
+  setTimeout(function() { res.json({status:status}); }, 1000)
 })
 
 module.exports = router
