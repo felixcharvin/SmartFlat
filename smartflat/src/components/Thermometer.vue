@@ -6,7 +6,7 @@
       <div>Humidity: {{ thermometer.humidity }} %</div>
       <hr>
       <h4>Settings:</h4>
-      <div class="col-xs-3">Temperature:</div>
+      <div>Temperature:</div>
       <input class="form-control" type="number" v-model="settings">
       <!-- <vue-slider v-bind="slider" v-model="slider.value"></vue-slider> -->
     </div>
