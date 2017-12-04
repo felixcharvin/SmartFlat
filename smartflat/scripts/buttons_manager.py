@@ -12,9 +12,7 @@ PIN_LR = 9
 PIN_TV = 11
 PIN_K = 6
 PIN_FUR = 13
-PATH = os.getcwd()
-
-print PATH
+PATH = os.path.dirname(os.path.realpath(__file__))
 
 PIN = int(sys.argv[1])
 STATUS = int(sys.argv[2])
@@ -48,10 +46,10 @@ print "BTN_MANAGER : { pin: "+str(PIN)+", status: "+str(STATUS)+", manual: "+str
 # 	else:
 # 		switch_on_lr("off")
 	
-os.system("python led_switch.py "+str(PIN)+" "+str(STATUS)+" "+str(MANUAL))
+os.system("python "+PATH+"/led_switch.py "+str(PIN)+" "+str(STATUS)+" "+str(MANUAL))
 # if PIN == PIN_LR:
 #   light_livingroom(False)
 # if PIN == PIN_TV and STATUS==1:
 # 	light_livingroom(True)
 if PIN == PIN_WIN:
-	os.system("python "+PATH+"/scripts/led_rgb_switch.py") #switch off the rgb led (heat)
+	os.system("python "+PATH+"/led_rgb_switch.py") #switch off the rgb led (heat)

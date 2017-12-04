@@ -21,8 +21,9 @@ router.post('/light', (req, res) => {
   let pin = req.body.id
   let stat = req.body.status
   console.log('status: ' + stat + ', pin: ' + pin)
-
-  child_proc.exec('python ./scripts/buttons_manager.py '+pin+' '+stat+' 1', (error, stdout, stderr) => {
+  let s = 'python ./scripts/buttons_manager.py '+pin+' '+stat+' 1'
+  console.log(s)
+  child_proc.exec(s, (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return;
