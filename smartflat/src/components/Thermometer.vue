@@ -43,7 +43,7 @@ export default {
   watch: {
     'slider.value': function(val, old) {
       if (this.thermometer.temperature) {
-        axios.post(URL.rootAPI + '/thermometer', {curTemp: this.thermometer.temperature, newTemp: val})
+        axios.put(URL.rootAPI + '/thermometer', {curTemp: this.thermometer.temperature, newTemp: val})
         .catch(err => {
           console.log(err)
         })
@@ -53,7 +53,7 @@ export default {
   methods: {
     getThermometer: function() {
       axios.get(URL.rootAPI+'/thermometer/setting')
-      .then(res => {
+      .then(res => {screenLeft
         this.slider.value = res.data.settings
       })
       .catch(err => {

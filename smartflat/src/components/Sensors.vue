@@ -1,6 +1,6 @@
 <template>
   <div class="panel panel-default">
-    <div class="panel-heading">sensors</div>
+    <div class="panel-heading">Sensors</div>
     <div class="panel-body">
       <div class="table-responsive">
         <table class="table">

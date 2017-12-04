@@ -26,6 +26,15 @@ router.get('/thermometer/setting', (req, res) => {
 })
 
 router.post('/thermometer', (req, res) => {
+  let status = req.body.status
+  db.sensors.update({_id: db.ObjectId('5a2313bcf36d285138ee0af1')}, {$set: {status: status}}, {}, (err, therm) => {
+    if (err) console.log(err)
+    console.log(therm)
+    res.json({status:'success', thermometer: therm})
+  })
+}) 
+
+router.put('/thermometer', (req, res) => {
   let curTemp = req.body.curTemp
   let newTemp = req.body.newTemp
   console.log('current: ' + curTemp + ', new: ' + newTemp)

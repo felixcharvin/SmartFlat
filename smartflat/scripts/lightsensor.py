@@ -14,11 +14,15 @@ from pylab import log
 import datetime
 import pymongo
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
 
-
+ID = ObjectId("5a1f0969734d1d3ed2310a53")
+PID = os.getpid()
+print PID
+db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": PID}}, upsert=True)
 
 PIN = 26
 
