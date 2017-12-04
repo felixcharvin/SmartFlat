@@ -12,6 +12,10 @@ router.post('/ultrasonic', (req, res) => {
   if (status == 'enable') script = child_proc.spawn('python', ['./scripts/alarm_sensor.py']) 
   else if (status == 'disable') script = child_proc.spawn('python', ['./scripts/kill_process.py', id])
   
+  script.stderr.on('data', (data) => {
+    console.log('stderr: ' + data);
+  });
+
   res.json({status:status})
 })
 

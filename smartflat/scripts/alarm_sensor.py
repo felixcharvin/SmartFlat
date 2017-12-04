@@ -7,13 +7,16 @@ from bson.objectid import ObjectId
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
 
-GPIO.cleanup()
-GPIO.setmode(GPIO.BCM)
-
 TRIG = 24
 ECHO = 23
 LED = 18
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(ECHO, GPIO.IN)
+GPIO.cleanup()
+
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
 GPIO.output(TRIG, False)
@@ -21,7 +24,7 @@ GPIO.output(TRIG, False)
 GPIO.setup(LED, GPIO.OUT)
 GPIO.output(LED,GPIO.LOW)
 
-GPIO.setup(DOOR,GPIO.IN,pull_up_down = GPIO.PUD_UP)
+#GPIO.setup(DOOR,GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
 mean_distance = 0
 pulsating_time = 0.01
@@ -49,12 +52,11 @@ def init(time_to_init, p_time):
 
 
 def waitingFor(mean, p_time):
-	open = True
-	while open :
-		if GPIO.input(DOOR)==0:
-			while GPIO.input(DOOR)==0:
-				True
-			open = not open
+	while True :
+#		if GPIO.input(DOOR)==0:
+#			while GPIO.input(DOOR)==0:
+#				True
+#			open = not open
 		distance = getDistance(p_time)
 		buffer = []
 		count = 1
