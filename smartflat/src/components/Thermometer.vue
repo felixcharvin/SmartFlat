@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-xs-3">Temperature:</div>
         <div class="col-xs-9">
-          <input type="number" v-model="settings">
+          <input class="form-control" type="number" v-model="settings">
           <!-- <vue-slider v-bind="slider" v-model="slider.value"></vue-slider> -->
         </div>
       </div>
