@@ -18,8 +18,6 @@ from pymongo import MongoClient
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
 
-
-
 PIN = 26
 
 if len(sys.argv)>1:
@@ -56,6 +54,7 @@ last_lum = 4.6
 if cursor.count()>0:
 	last_data = next(cursor,None)
 	last_lum = last_data['luminosity']
+print data
 
 def update_data(PIN):
 	global last_lum 	
@@ -65,6 +64,7 @@ def update_data(PIN):
 	sum = sum/50.0
 	if sum-last_lum>1 or sum-last_lum<-1:
 		data['luminosity'] = sum,
+		print "lum: "+str(sum)
 		result = db.luminosities.insert(data)
 		last_lum = sum
 
