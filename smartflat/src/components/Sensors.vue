@@ -18,7 +18,7 @@
               <td>{{ sensor.location }}</td>
               <td v-bind:class="{'text-danger':sensor.status=='off','text-success':sensor.status=='on'}"><b>{{ sensor.status.toUpperCase() }}</b></td>
               <td>
-                <a v-if="sensor.status != 'on'" class="btn btn-default" v-bind:class="{'disabled':sensor.type=='ultrasonic'}" @click="switchStatus(sensor.type, sensor.pin, 1)">On</a> 
+                <a v-if="sensor.status != 'on'" class="btn btn-default" :disabled="sensor.type=='ultrasonic'" @click="switchStatus(sensor.type, sensor.pin, 1)">On</a> 
                 <a v-if="sensor.status != 'off'" class="btn btn-danger" @click="switchStatus(sensor.type, sensor.pin, 0)">Off</a>
               </td>
             </tr>
