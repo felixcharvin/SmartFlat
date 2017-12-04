@@ -53,7 +53,8 @@ export default {
   methods: {
     getThermometer: function() {
       axios.get(URL.rootAPI+'/thermometer/setting')
-      .then(res => {screenLeft
+      .then(res => {
+        console.log(res.data)
         this.slider.value = res.data.settings
       })
       .catch(err => {
