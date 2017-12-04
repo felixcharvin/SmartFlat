@@ -42,11 +42,8 @@ export default {
   },
   watch: {
     'slider.value': function(val, old) {
-      if (this.thermometer.temperature && val != this.thermometer.temperature) {
-        axios.post(URL.rootAPI + '/thermometer', {oldTemp: old, newTemp: val})
-        .then(res => {
-          // console.log(res)
-        })
+      if (this.thermometer.temperature) {
+        axios.post(URL.rootAPI + '/thermometer', {curTemp: this.thermometer.temperature, newTemp: val})
         .catch(err => {
           console.log(err)
         })
@@ -55,11 +52,17 @@ export default {
   },
   methods: {
     getThermometer: function() {
+      axios.get(URL.rootAPI+'/thermometer/setting')
+      .then(res => {
+        this.slider.value = res.data.settings
+      })
+      .catch(err => {
+        console.log(err)
+      })
       axios.get(URL.rootAPI + '/thermometer')
       .then(res => {
         this.thermometer.temperature = res.data.temperature
         this.thermometer.humidity = res.data.humidity
-        this.slider.value = res.data.temperature
         // console.log(this.thermometer)
       })
       .catch(e => {

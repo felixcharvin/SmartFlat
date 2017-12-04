@@ -17,14 +17,22 @@ router.get('/thermometer', (req, res) => {
   })
 })
 
+router.get('/thermometer/setting', (req, res) => {
+  db.sensors.findOne({_id: db.ObjectId('5a2313bcf36d285138ee0af1')}, (err, item) => {
+    if (err) console.log(err)
+    console.log(item)
+    res.json(item)
+  })
+})
+
 router.post('/thermometer', (req, res) => {
-  let oldTemp = req.body.oldTemp
+  let curTemp = req.body.curTemp
   let newTemp = req.body.newTemp
-  console.log('old: ' + oldTemp + ', new: ' + newTemp)
+  console.log('current: ' + curTemp + ', new: ' + newTemp)
 
   var status = 'normal' 
-  if (newTemp > oldTemp) status = 'hot' 
-  else if (newTemp < oldTemp) status = 'cold' 
+  if (newTemp > curTemp) status = 'hot' 
+  else if (newTemp < curTemp) status = 'cold' 
   let script = child_proc.spawn('python', ['./scripts/led_rgb_switch.py', status])
   
   let response = { success: null, data: null }
