@@ -35,6 +35,12 @@ router.post('/thermometer', (req, res) => {
   else if (newTemp < curTemp) status = 'cold' 
   let script = child_proc.spawn('python', ['./scripts/led_rgb_switch.py', status])
   
+  db.sensors.update({_id: db.ObjectId('5a2313bcf36d285138ee0af1')}, {$set: {settings: newTemp}}, {}, (err, therm) => {
+    if (err) console.log(err)
+    console.log(therm)
+    res.json({status:'success', thermometer: therm})
+  })
+
   let response = { success: null, data: null }
   script.stderr.on('data', (data) => {
     console.log('stderr: ' + data);
