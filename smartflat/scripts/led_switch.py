@@ -65,6 +65,7 @@ data = {
 print data
 if PIN != PIN_TV and PIN != PIN_FUR and PIN != PIN_WIN:
 	db.lights.insert_one(data)
-
+else:
+	db.buttons.insert_one(data)
 
 sys.exit()

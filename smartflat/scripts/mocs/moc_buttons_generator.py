@@ -7,6 +7,7 @@ from pymongo import MongoClient
 
 TV = "TV"
 FURNACE = "Furnace"
+WINDOW = "Window"
 ON = "on"
 OFF = "off"
 
@@ -22,7 +23,8 @@ for i in range(0, int(count)):
   month = randint(1, 12)
   date = str(datetime.datetime(2017, month, day, hour, 0, 0)).replace(" ", "T")
   status = OFF if randint(0,1) == 0 else ON
-  location = TV if randint(0,1) == 0 else FURNACE
+  rand = randint(0,2)
+  location = TV if rand == 0 else WINDOW if rand == 1 else FURNACE
 
   button = {
     "location": location,
