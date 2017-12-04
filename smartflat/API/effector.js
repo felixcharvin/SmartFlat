@@ -10,5 +10,12 @@ router.get('/effectors', (req, res) => {
   })
 })
 
+router.get('/sensors', (req, res) => {
+  db.sensors.find().toArray((err, items) => {
+    if (err) console.log(err)
+    res.json(items)
+  })
+})
+
 
 module.exports = router

@@ -6,7 +6,7 @@
       <hr>
       <form>
         <div class="form-group">
-          <label class="sr-only" for="code">Amount (in dollars)</label>
+          <label class="sr-only" for="code"></label>
           <div class="input-group">
             <div class="input-group-addon">$</div>
             <input type="number" v-model="code" class="form-control" id="code" placeholder="pass code">
@@ -36,19 +36,19 @@
               <div class="form-group">
                 <label class="col-xs-4 control-label" for="old-pass">Old passcode: </label>
                 <div class="col-xs-8">
-                  <input type="number" id="old-pass" class="form-control" v-model="oldCode" placeholder="Old pass code">
+                  <input type="text" id="old-pass" class="form-control" v-model="oldCode" placeholder="Old pass code">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-xs-4 control-label" for="new-pass">New passcode: </label>
                 <div class="col-xs-8">
-                  <input type="number" id="new-pass" class="form-control" v-model="newCode" placeholder="New pass code">
+                  <input type="text" id="new-pass" class="form-control" v-model="newCode" placeholder="New pass code">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-xs-4 control-label" for="new-pass2">Repeat new passcode: </label>
                 <div class="col-xs-8">
-                  <input type="number" id="new-pass2" class="form-control" v-model="newCode2" placeholder="Repeat new pass code">
+                  <input type="text" id="new-pass2" class="form-control" v-model="newCode2" placeholder="Repeat new pass code">
                 </div>
               </div>
             </div>
