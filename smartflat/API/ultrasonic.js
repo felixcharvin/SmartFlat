@@ -3,6 +3,8 @@ let sys         = require('sys')
 let child_proc  = require('child_process');
 let db          = require('mongojs')('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 
+const id = '5a19e631f36d280cc00ddb8f'
+
 router.post('/ultrasonic', (req, res) => {
   var script = null
   if (req.body.status == 'enable') script = child_proc.spawn('python', ['./scripts/mocs/moc_ultrasonic.py']) 
@@ -27,7 +29,7 @@ router.get('/ultrasonics', (req, res) => {
 
 router.put('/ultrasonic/passcode', (req, res) => {
   let passcode = req.body.passcode
-  db.sensors.update({_id: db.ObjectId('5a19e631f36d280cc00ddb8f')}, {$set: {passcode: passcode}}, {}, (err, alarm) => {
+  db.sensors.update({_id: db.ObjectId(id)}, {$set: {passcode: passcode}}, {}, (err, alarm) => {
     if (err) console.log(err)
     res.json({status:'success', alarm: alarm})
   })

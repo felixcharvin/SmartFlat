@@ -3,6 +3,8 @@ let sys         = require('sys')
 let child_proc  = require('child_process');
 let db          = require('mongojs')('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 
+const id = '5a2313bcf36d285138ee0af1'
+
 router.get('/thermometers', (req, res) => {
   db.thermometers.find((err, items) => {
     if (err) console.log(err)
@@ -18,7 +20,7 @@ router.get('/thermometer', (req, res) => {
 })
 
 router.get('/thermometer/setting', (req, res) => {
-  db.sensors.findOne({_id: db.ObjectId('5a2313bcf36d285138ee0af1')}, (err, item) => {
+  db.sensors.findOne({_id: db.ObjectId(id)}, (err, item) => {
     if (err) console.log(err)
     console.log(item)
     res.json(item)
@@ -27,7 +29,7 @@ router.get('/thermometer/setting', (req, res) => {
 
 router.post('/thermometer', (req, res) => {
   let status = req.body.status
-  db.sensors.update({_id: db.ObjectId('5a2313bcf36d285138ee0af1')}, {$set: {status: status}}, {}, (err, therm) => {
+  db.sensors.update({_id: db.ObjectId(id)}, {$set: {status: status}}, {}, (err, therm) => {
     if (err) console.log(err)
     console.log(therm)
     res.json({status:'success', thermometer: therm})
@@ -44,7 +46,7 @@ router.put('/thermometer', (req, res) => {
   else if (newTemp < curTemp) status = 'cold' 
   let script = child_proc.spawn('python', ['./scripts/led_rgb_switch.py', status])
   
-  db.sensors.update({_id: db.ObjectId('5a2313bcf36d285138ee0af1')}, {$set: {settings: newTemp}}, {}, (err, therm) => {
+  db.sensors.update({_id: db.ObjectId(id)}, {$set: {settings: newTemp}}, {}, (err, therm) => {
     if (err) console.log(err)
     console.log(therm)
     res.json({status:'success', thermometer: therm})
