@@ -9,7 +9,8 @@
       <div class="row">
         <div class="col-xs-3">Temperature:</div>
         <div class="col-xs-9">
-          <vue-slider v-bind="slider" v-model="slider.value"></vue-slider>
+          <input type="number" v-bind="settings">
+          <!-- <vue-slider v-bind="slider" v-model="slider.value"></vue-slider> -->
         </div>
       </div>
     </div>
@@ -27,6 +28,7 @@ export default {
   data () {
     return {
       thermometer: {temperature: null, humidity: null},
+      settings: null,
       slider: {
         value: null,
         height: 6,
@@ -55,7 +57,8 @@ export default {
       axios.get(URL.rootAPI+'/thermometer/setting')
       .then(res => {
         console.log(res.data)
-        this.slider.value = res.data.settings
+        // this.slider.value = res.data.settings
+        this.settings = res.data.settings
       })
       .catch(err => {
         console.log(err)
