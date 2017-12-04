@@ -20,7 +20,7 @@ $ npm install -g nodemon
 * modifier 'localhost' par l'IP du raspberry dans /vuejs/config/global.js
 * ajouter "--host <IP_RASPBERRY> --port <PORT>" à la ligne 9 (scripts:dev:) dans le fichier package.json
 
-## Lancement du site
+## Lancement du site en local
 * dans un premier terminal
 ```bash
 ## lancement de l'API avec nodemon
@@ -31,3 +31,15 @@ $ npm run dev
 ```
 * URL de l'API: [http://localhost:3000/api/](http://localhost:3000/api/)
 * URL du site: [http://localhost:8080](http://localhost:8080)
+
+## Lancement du site sur le rpi
+* dans un premier terminal
+```bash
+## lancement de l'API
+$ nohup node server.js > ../log_server.txt &
+
+## lancement du site (mode développement)
+$ nohup npm run dev > ../log_vue.txt &
+```
+* URL de l'API: [http://192.167.0.172:3000/api/](http://192.167.0.172:3000/api/)
+* URL du site: [http://192.167.0.172:8080](http://192.167.0.172:8080)
