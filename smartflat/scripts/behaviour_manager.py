@@ -31,7 +31,7 @@ def turn_on_livingroom(brightness):
 		if brightness in "high":
 			os.system("python led_switch.py 9 1 " + man)
 		else:
-			os.system("python led_switch.py 9 0 " + man")
+			os.system("python led_switch.py 9 0 " + man)
 	
 
 def turn_on_tv():
