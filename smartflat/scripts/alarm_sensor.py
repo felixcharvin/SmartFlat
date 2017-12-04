@@ -1,12 +1,14 @@
 import RPi.GPIO as GPIO
 import time
 import os
-
-GPIO.cleanup()
-GPIO.setmode(GPIO.BCM)
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
+
+GPIO.cleanup()
+GPIO.setmode(GPIO.BCM)
 
 TRIG = 24
 ECHO = 23
@@ -71,8 +73,6 @@ def waitingFor(mean, p_time):
 			
 			time = time_counter*p_time
 			print "He was here ",time," s"
-			if time > 1:
-				
 			GPIO.output(LED,GPIO.LOW)
 
 print "distance measurement in progress..."

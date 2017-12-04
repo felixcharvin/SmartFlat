@@ -7,8 +7,8 @@ const id = '5a19e631f36d280cc00ddb8f'
 
 router.post('/ultrasonic', (req, res) => {
   var script = null
-  if (req.body.status == 'enable') script = child_proc.spawn('python', ['./scripts/mocs/moc_ultrasonic.py']) 
-  else script = child_proc.spawn('python', ['./scripts/mocs/moc_ultrasonic_stop.py'])
+  if (req.body.status == 'enable') script = child_proc.spawn('python', ['./scripts/alarm_sensor.py']) 
+  else script = child_proc.spawn('python', ['./scripts/kill_process.py', id])
   
   res.json({success:true})
 })
