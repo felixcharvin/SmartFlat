@@ -15,5 +15,5 @@ MANUAL = int(sys.argv[2]) if len(sys.argv)>2 else 0
 
 print "THERMOMETER_MANAGER : { action: "+ACTION+", manual: "+str(MANUAL)+" }"
 if WINDOW in "off":
-  os.system("python "+PATH+"/led_rgb_switch.py "ACTION) #switch off the rgb led (heat)
+  os.system("python "+PATH+"/led_rgb_switch.py "+ACTION)
 
