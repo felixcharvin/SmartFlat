@@ -50,5 +50,7 @@ def light_livingroom(tv):
 os.system("python "+PATH+"/led_switch.py "+str(PIN)+" "+str(STATUS)+" "+str(MANUAL))
 if PIN == PIN_TV and STATUS==1:
 	light_livingroom(True)
+if PIN == PIN_FUR and STATUS==1:
+	os.system("python "+PATH+"/led_switch.py "+str(PIN_K)+" "+str(STATUS)+" "+str(MANUAL))
 if PIN == PIN_WIN:
-	os.system("python "+PATH+"/led_rgb_switch.py") #switch off the rgb led (heat)
+	os.system("python "+PATH+"/led_rgb_switch.py" + (" normal" if STATUS==0 else "")) #switch off the rgb led (heat)

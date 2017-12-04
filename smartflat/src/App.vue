@@ -4,6 +4,9 @@
       <div class="col-md-6">
         <effectors></effectors>
       </div>
+      <div class="col-md-6">
+        <sensors></sensors>
+      </div>
       <div class="col-md-3">
         <ultrasonics></ultrasonics>
       </div>
@@ -31,10 +34,11 @@ import lights from './components/Lights.vue'
 import effectors from './components/Effectors.vue'
 import thermometer from './components/Thermometer.vue'
 import buttons from './components/Buttons.vue'
+import sensors from './components/Sensors.vue'
 
 export default {
   name: 'app',
-  components: { ultrasonics, lights, buttons, effectors, thermometer },
+  components: { ultrasonics, lights, buttons, effectors, thermometer, sensors },
 }
 </script>
 
