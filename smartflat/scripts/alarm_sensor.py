@@ -1,19 +1,23 @@
 import RPi.GPIO as GPIO
 import time
+import datetime
 import os
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
+ID = ObjectId("5a19e631f36d280cc00ddb8f")
 
 TRIG = 24
 ECHO = 23
 LED = 18
 
+#cleanup before start
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
+GPIO.setup(LED, GPIO.OUT)
 GPIO.cleanup()
 
 GPIO.setmode(GPIO.BCM)
@@ -23,8 +27,6 @@ GPIO.output(TRIG, False)
 
 GPIO.setup(LED, GPIO.OUT)
 GPIO.output(LED,GPIO.LOW)
-
-#GPIO.setup(DOOR,GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
 mean_distance = 0
 pulsating_time = 0.01
@@ -50,19 +52,24 @@ def init(time_to_init, p_time):
 		data.append(getDistance(p_time))
 	return sum(data)/time_to_init
 
+def updateDB(time, distance):
+	data = {
+		"distance": distance,
+		"duration": time,
+		"date": str(datetime.datetime.utcnow()).replace(" ", "T")
+	}
+	db.ultrasonics.insert_one(data)
+	db.sensors.update_one({"_id": ID}, {"$set":{"alert": True}})
+	os.system("python sensors_manager.py alarm alert")
+
 
 def waitingFor(mean, p_time):
 	while True :
-#		if GPIO.input(DOOR)==0:
-#			while GPIO.input(DOOR)==0:
-#				True
-#			open = not open
 		distance = getDistance(p_time)
 		buffer = []
 		count = 1
 		time_counter = 1
 		if(distance<mean*0.7):
-			print "Someone is detected at ",distance," cm !"
 			GPIO.output(LED,GPIO.HIGH)
 			buffer.append(distance)
 			while (sum(buffer)/count<mean*0.8):
@@ -74,17 +81,15 @@ def waitingFor(mean, p_time):
 					del buffer[1]
 			
 			time = time_counter*p_time
-			print "He was here ",time," s"
+			if time > 1:
+				updateDB(time, distance)
 			GPIO.output(LED,GPIO.LOW)
 
 print "distance measurement in progress..."
 mean_distance = init(init_time, pulsating_time)
 print "Mean distance : ",mean_distance," cm"
 
-ID = ObjectId("5a19e631f36d280cc00ddb8f")
-pid = os.getpid()
-print pid
-db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": pid}}, upsert=True)
+db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "alert": False, "pid": os.getpid()}}, upsert=True)
 
 print "Now waiting for someone to pass by..."
 waitingFor(mean_distance,pulsating_time)
