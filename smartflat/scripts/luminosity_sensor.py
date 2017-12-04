@@ -22,6 +22,7 @@ db = client.smartflat
 
 ID = ObjectId("5a1f0969734d1d3ed2310a53")
 db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": os.getpid()}}, upsert=True)
+PATH = os.path.dirname(os.path.realpath(__file__))
 
 PIN = 26
 
@@ -74,7 +75,7 @@ def update_data(PIN):
 		}
 		print data
 		db.luminosities.insert(data)
-		os.system("python "+PATH+"/luminosity_manager.py "+sum)
+		os.system("python "+PATH+"/luminosity_manager.py "+str(sum))
 		last_lum = sum
 
 while True :
