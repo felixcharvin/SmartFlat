@@ -22,6 +22,7 @@ let effector = require('./API/effector')
 let button = require('./API/button')
 let thermometer = require('./API/thermometer')
 let refresh = require('./API/refresh')
+let luminosity = require('./API/luminosity')
 
 app.use('/api', ultrasonic)
 app.use('/api', light)
@@ -29,6 +30,7 @@ app.use('/api', effector)
 app.use('/api', button)
 app.use('/api', thermometer)
 app.use('/api', refresh)
+app.use('/api', luminosity)
 
 app.listen(port, () => {
   console.log('Server is running on port', port);

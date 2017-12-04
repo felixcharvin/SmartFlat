@@ -3,6 +3,8 @@ let sys         = require('sys')
 let child_proc  = require('child_process');
 let db          = require('mongojs')('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 
+const id = "5a1f0969734d1d3ed2310a53"
+
 router.get('/luminosities', (req, res) => {  
   db.luminosities.find((err, items) => {
     if (err) console.log(err)
