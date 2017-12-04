@@ -21,7 +21,7 @@ GPIO.output(TRIG, False)
 GPIO.setup(LED, GPIO.OUT)
 GPIO.output(LED,GPIO.LOW)
 
-GPIO.setup(DOOR,GPIO.IN,pull_up_down = GPIO.PUD_UP)
+#GPIO.setup(DOOR,GPIO.IN,pull_up_down = GPIO.PUD_UP)
 
 mean_distance = 0
 pulsating_time = 0.01
@@ -51,10 +51,10 @@ def init(time_to_init, p_time):
 def waitingFor(mean, p_time):
 	open = True
 	while open :
-		if GPIO.input(DOOR)==0:
-			while GPIO.input(DOOR)==0:
-				True
-			open = not open
+#		if GPIO.input(DOOR)==0:
+#			while GPIO.input(DOOR)==0:
+#				True
+#			open = not open
 		distance = getDistance(p_time)
 		buffer = []
 		count = 1
