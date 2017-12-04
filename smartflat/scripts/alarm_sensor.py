@@ -61,11 +61,7 @@ def updateDB(time, distance):
 	}
 	db.ultrasonics.insert_one(data)
 	db.sensors.update_one({"_id": ID}, {"$set":{"alert": True}})
-<<<<<<< HEAD
 	os.system("python "+PATH+"/sensors_manager.py alarm alert")
-=======
-	os.system("python sensors_manager.py alarm alert")
->>>>>>> 307235ff0580192cdc9d90695bf1a05109b347d6
 
 def waitingFor(mean, p_time):
 	while True :
