@@ -39,7 +39,7 @@ export default {
     }
   },
   watch: {
-    'slider.value': function(val, old) {
+    settings: function(val, old) {
       if (this.thermometer.temperature) {
         axios.put(URL.rootAPI + '/thermometer', {curTemp: this.thermometer.temperature, newTemp: val})
         .catch(err => {
