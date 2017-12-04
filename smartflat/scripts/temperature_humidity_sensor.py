@@ -7,7 +7,6 @@ import Adafruit_DHT
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
 
@@ -16,6 +15,8 @@ db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "pid": os.getpid()}}
 
 thermometer = db.sensors.find_one({"_id": ID})
 settings = thermometer["settings"]
+
+PATH = os.path.dirname(os.path.realpath(__file__))
 
 # Parse command line parameters. if another sensor is used :
 sensor_args = { '11': Adafruit_DHT.DHT11,
