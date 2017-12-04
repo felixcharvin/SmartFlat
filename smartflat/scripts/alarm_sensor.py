@@ -8,6 +8,7 @@ from bson.objectid import ObjectId
 client = MongoClient('mongodb://dreamteam:domotique@ds133311.mlab.com:33311/smartflat')
 db = client.smartflat
 ID = ObjectId("5a19e631f36d280cc00ddb8f")
+PATH = os.path.dirname(os.path.realpath(__file__))
 
 TRIG = 24
 ECHO = 23
@@ -60,8 +61,7 @@ def updateDB(time, distance):
 	}
 	db.ultrasonics.insert_one(data)
 	db.sensors.update_one({"_id": ID}, {"$set":{"alert": True}})
-	os.system("python sensors_manager.py alarm alert")
-
+	os.system("python "+PATH+"/sensors_manager.py alarm alert")
 
 def waitingFor(mean, p_time):
 	while True :
