@@ -62,7 +62,7 @@ def updateDB(time, distance):
 	print data
 	db.ultrasonics.insert_one(data)
 	db.sensors.update_one({"_id": ID}, {"$set":{"alert": True}})
-	os.system("python "+PATH+"/sensors_manager.py ultrasonic alert")
+	os.system("python "+PATH+"/alarm_manager.py alert")
 
 def waitingFor(mean, p_time):
 	while True :
@@ -91,6 +91,7 @@ mean_distance = init(init_time, pulsating_time)
 print "Mean distance : ",mean_distance," cm"
 
 db.sensors.update_one({"_id": ID}, {"$set":{"status": "on", "alert": False, "pid": os.getpid()}}, upsert=True)
+os.system("python "+PATH+"/alarm_manager.py on")
 
 print "Now waiting for someone to pass by..."
 waitingFor(mean_distance,pulsating_time)
