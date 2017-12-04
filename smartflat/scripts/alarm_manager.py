@@ -1,8 +1,8 @@
 import datetime
 import pymongo
-from pymongo import MongoClient
 import sys
 import os
+from pymongo import MongoClient
 
 PIN_LR = 9
 PIN_TV = 11
