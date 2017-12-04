@@ -31,11 +31,11 @@ def switch_on_lr(brightness):
   print brightness
 
   if brightness in "low" :
-    os.system("python led_switch.py 10 1 " + str(MANUAL))
+    os.system("python "+PATH+"/led_switch.py 10 1 " + str(MANUAL))
   elif brightness in "on":
-    os.system("python led_switch.py 9 1 " + str(MANUAL))
+    os.system("python "+PATH+"/led_switch.py 9 1 " + str(MANUAL))
   else:
-    os.system("python led_switch.py 9 0 " + str(MANUAL))
+    os.system("python "+PATH+"/led_switch.py 9 0 " + str(MANUAL))
 		
 
 def light_livingroom(tv):
