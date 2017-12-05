@@ -1,5 +1,8 @@
 <template>
   <div id="app" class="container-fluid">
+    <div class="page-header">
+      <h1>SmartFlat <small>Manage your appartment</small></h1>
+    </div>
     <div class="row">
       <div class="col-md-6">
         <effectors></effectors>
@@ -7,10 +10,12 @@
       <div class="col-md-6">
         <sensors></sensors>
       </div>
-      <div class="col-md-3">
+    </div>
+    <div class="row">
+      <div class="col-md-6">
         <ultrasonics></ultrasonics>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-6">
         <thermometer></thermometer>
       </div>
     </div>

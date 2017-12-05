@@ -2,12 +2,21 @@
   <div class="panel panel-default">
     <div class="panel-heading">Thermometer</div>
     <div class="panel-body">
-      <div>Temperature: {{ thermometer.temperature }} °C</div>
-      <div>Humidity: {{ thermometer.humidity }} %</div>
-      <hr>
+      <div class="alert alert-info" role="alert">
+        <div class="row">
+        <div class="col-xs-6 text-left">Temperature:</div> <div class="col-xs-6 text-right"><b>{{ thermometer.temperature }} °C</b></div>
+        <div class="col-xs-6 text-left">Humidity:</div> <div class="col-xs-6 text-right"><b>{{ thermometer.humidity }} %</b></div>
+        </div>
+      </div>
       <h4>Settings:</h4>
-      <div>Temperature:</div>
-      <input class="form-control" type="number" v-model="settings">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="temperature" class="col-sm-2 control-label">Temperature: </label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" id="temperature" v-model="settings" placeholder="Temperature">
+          </div>
+        </div>
+      </form>
       <!-- <vue-slider v-bind="slider" v-model="slider.value"></vue-slider> -->
     </div>
   </div>
@@ -41,7 +50,6 @@ export default {
   watch: {
     'settings': function(val, old) {
       if (this.thermometer.temperature) {
-        console.log('old: '+old+', new: '+val)
         axios.put(URL.rootAPI + '/thermometer', {curTemp: this.thermometer.temperature, newTemp: val})
         .catch(err => {
           console.log(err)
@@ -53,7 +61,7 @@ export default {
     getThermometer: function() {
       axios.get(URL.rootAPI+'/thermometer/setting')
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         // this.slider.value = res.data.settings
         this.settings = res.data.settings
       })

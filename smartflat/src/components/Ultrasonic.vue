@@ -2,21 +2,26 @@
   <div class="panel panel-default">
     <div class="panel-heading">Alarm</div>
     <div class="panel-body">
-      <div class="alert" v-bind:class="{'alert-danger':alarm.status=='off', 'alert-success':alarm.status=='on'}">Status: {{ alarm.status }}</div>
+      <div class="alert" v-bind:class="{'alert-danger':alarm && alarm.status=='off', 'alert-success':alarm && alarm.status=='on'}">
+        <div class="row">
+          <div class="col-xs-6">Status:</div>
+          <div v-if="alarm" class="col-xs-6 text-right"><b>{{ alarm.status.toUpperCase() }}</b></div>
+        </div>
+      </div>
       <hr>
       <form>
         <div class="form-group">
           <label class="sr-only" for="code"></label>
           <div class="input-group">
-            <div class="input-group-addon">$</div>
+            <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
             <input type="number" v-model="code" class="form-control" id="code" placeholder="pass code">
           </div>
         </div>
         <div v-if="passcodeError" class="col-xs-12">
           <div class="alert alert-danger" role="alert">Incorrect passcode</div>
         </div>
-        <button v-if="alarm.status == 'off'" type="reset" class="btn btn-default" @click="enable()">Enable</button> 
-        <button v-if="alarm.status == 'on'" type="reset" class="btn btn-danger" @click="disable()">Disable</button>
+        <button v-if="alarm && alarm.status == 'off'" type="reset" class="btn btn-default" @click="enable()">Enable</button> 
+        <button v-if="alarm && alarm.status == 'on'" type="reset" class="btn btn-danger" @click="disable()">Disable</button>
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Passcode</button>
       </form>
     </div>
@@ -83,7 +88,7 @@ export default {
   name: 'ultrasonics',
   data () {
     return {
-      alarm: {},
+      alarm: null,
       code: null,
       oldCode: null,
       newCode: null,
@@ -150,7 +155,7 @@ export default {
     init: function(status) {
       axios.post(URL.rootAPI + '/ultrasonic', {status:status})
       .then(res => {
-        console.log(res)
+        // console.log(res)
       })
       .catch(e => {
         console.log(e)

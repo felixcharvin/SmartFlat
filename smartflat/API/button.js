@@ -20,7 +20,6 @@ router.get('/buttons/frequencies', (req, res) => {
 router.post('/button', (req, res) => {
   let id = req.body.id
   let stat = req.body.status
-  console.log('id: ' + id + ', status: ' + stat)
 
   let script = child_proc.spawn('python', ['./scripts/mocs/moc_buttons.py', id, stat])
 

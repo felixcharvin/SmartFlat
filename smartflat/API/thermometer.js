@@ -22,14 +22,12 @@ router.get('/thermometer', (req, res) => {
 router.get('/thermometer/setting', (req, res) => {
   db.sensors.findOne({_id: db.ObjectId(id)}, (err, item) => {
     if (err) console.log(err)
-    console.log(item)
     res.json(item)
   })
 })
 
 router.post('/thermometer', (req, res) => {
   let status = req.body.status
-  console.log('thermometer status: '+status)
   var script = null
   if (status == 1) script = child_proc.spawn('python', ['./scripts/temperature_humidity_sensor.py']) 
   else if (status == 0) script = child_proc.spawn('python', ['./scripts/kill_process.py', id])
@@ -46,7 +44,6 @@ router.post('/thermometer', (req, res) => {
 router.put('/thermometer', (req, res) => {
   let curTemp = req.body.curTemp
   let newTemp = req.body.newTemp
-  console.log('current: ' + curTemp + ', new: ' + newTemp)
 
   var status = 'normal' 
   if (newTemp > curTemp) status = 'hot' 
@@ -55,22 +52,14 @@ router.put('/thermometer', (req, res) => {
   
   db.sensors.update({_id: db.ObjectId(id)}, {$set: {settings: newTemp}}, {}, (err, therm) => {
     if (err) console.log(err)
-    console.log(therm)
     res.json({status:'success', thermometer: therm})
   })
 
-  let response = { success: null, data: null }
   script.stderr.on('data', (data) => {
     console.log('stderr: ' + data);
-    response.success = false
-    response.data = data
-    res.json(status)
   });
   script.stdout.on('data', (data) => {
     console.log('stdout: ' + data);
-    response.success = true
-    response.data = data
-    res.json(status)    
   });
 })
 

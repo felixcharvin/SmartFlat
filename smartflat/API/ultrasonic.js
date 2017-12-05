@@ -7,7 +7,6 @@ const id = '5a19e631f36d280cc00ddb8f'
 
 router.post('/ultrasonic', (req, res) => {
   let status = req.body.status
-  console.log('alarm '+status)
   var script = null
   if (status == 'enable') script = child_proc.spawn('python', ['./scripts/alarm_sensor.py']) 
   else if (status == 'disable') script = child_proc.spawn('python', ['./scripts/kill_process.py', id])
